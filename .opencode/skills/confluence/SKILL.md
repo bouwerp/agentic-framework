@@ -24,9 +24,10 @@ Use this skill when:
 ### Priority Order for Credentials
 
 1. **Environment Variables** (highest priority - use if available)
-   - `CONFLUENCE_API_TOKEN` or `ATLASSIAN_API_TOKEN`
-   - `CONFLUENCE_EMAIL` or `ATLASSIAN_EMAIL`
-   - `CONFLUENCE_SITE` or `CONFLUENCE_DOMAIN`
+   - `ATLASSIAN_API_TOKEN` (primary, works for both JIRA and Confluence)
+   - `ATLASSIAN_EMAIL`
+   - `ATLASSIAN_SITE` (e.g., `your-domain.atlassian.net`)
+   - Legacy: `CONFLUENCE_API_TOKEN`, `CONFLUENCE_EMAIL`, `CONFLUENCE_SITE`
 
 2. **ACLI Config File** (medium priority - decode if env vars not set)
    - Located at `~/.config/acli/confluence_config.yaml` or `~/.config/acli/jira_config.yaml`
@@ -39,11 +40,15 @@ Use this skill when:
 ### Checking Environment Variables
 
 ```bash
-# Check if env vars are available
-if [ -n "$CONFLUENCE_API_TOKEN" ]; then
+# Check if env vars are available (ATLASSIAN_* is primary, CONFLUENCE_* for backward compat)
+if [ -n "$ATLASSIAN_API_TOKEN" ]; then
+  API_TOKEN="$ATLASSIAN_API_TOKEN"
+  EMAIL="${ATLASSIAN_EMAIL:-$CONFLUENCE_EMAIL}"
+  SITE="${ATLASSIAN_SITE:-$CONFLUENCE_SITE:-$CONFLUENCE_DOMAIN}"
+elif [ -n "$CONFLUENCE_API_TOKEN" ]; then
   API_TOKEN="$CONFLUENCE_API_TOKEN"
-  EMAIL="${CONFLUENCE_EMAIL:-$CONFLUENCE_EMAIL}"
-  SITE="${CONFLUENCE_SITE:-$CONFLUENCE_DOMAIN}"
+  EMAIL="${CONFLUENCE_EMAIL:-$ATLASSIAN_EMAIL}"
+  SITE="${CONFLUENCE_SITE:-$ATLASSIAN_SITE:-$CONFLUENCE_DOMAIN}"
 fi
 ```
 

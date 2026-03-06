@@ -21,9 +21,10 @@ Use this skill when:
 ### Priority Order for Credentials
 
 1. **Environment Variables** (highest priority - use if available)
-   - `JIRA_API_TOKEN` or `ATLASSIAN_API_TOKEN`
-   - `JIRA_EMAIL` or `ATLASSIAN_EMAIL`
-   - `JIRA_SITE` or `JIRA_DOMAIN`
+   - `ATLASSIAN_API_TOKEN` (primary, works for both JIRA and Confluence)
+   - `ATLASSIAN_EMAIL`
+   - `ATLASSIAN_SITE` (e.g., `your-domain.atlassian.net`)
+   - Legacy: `JIRA_API_TOKEN`, `JIRA_EMAIL`, `JIRA_SITE`
 
 2. **ACLI Config File** (medium priority - decode if env vars not set)
    - Located at `~/.config/acli/jira_config.yaml`
@@ -37,11 +38,15 @@ Use this skill when:
 ### Checking Environment Variables
 
 ```bash
-# Check if env vars are available
-if [ -n "$JIRA_API_TOKEN" ]; then
+# Check if env vars are available (ATLASSIAN_* is primary, JIRA_* for backward compat)
+if [ -n "$ATLASSIAN_API_TOKEN" ]; then
+  API_TOKEN="$ATLASSIAN_API_TOKEN"
+  EMAIL="${ATLASSIAN_EMAIL:-$JIRA_EMAIL}"
+  SITE="${ATLASSIAN_SITE:-$JIRA_SITE:-$JIRA_DOMAIN}"
+elif [ -n "$JIRA_API_TOKEN" ]; then
   API_TOKEN="$JIRA_API_TOKEN"
   EMAIL="${JIRA_EMAIL:-$ATLASSIAN_EMAIL}"
-  SITE="${JIRA_SITE:-$JIRA_DOMAIN}"
+  SITE="${JIRA_SITE:-$ATLASSIAN_SITE:-$JIRA_DOMAIN}"
 fi
 ```
 
