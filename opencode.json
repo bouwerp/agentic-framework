@@ -1,0 +1,117 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "default_agent": "orchestrator",
+  "model": "opencode/claude-sonnet-4-6",
+  "small_model": "opencode/claude-haiku-4-5",
+  "agent": {
+    "orchestrator": {
+      "description": "Orchestrator agent that coordinates tasks between Worker and Validator agents. Breaks down complex tasks, delegates to workers, and validates results before completion.",
+      "mode": "primary",
+      "model": "opencode/claude-sonnet-4-6",
+      "temperature": 0.3,
+      "steps": 50,
+      "permission": {
+        "task": {
+          "orchestrator-*": "allow",
+          "worker": "allow",
+          "validator": "allow"
+        },
+        "bash": {
+          "*": "ask"
+        },
+        "edit": "ask",
+        "write": "ask"
+      }
+    },
+    "worker": {
+      "description": "Worker agent that implements code changes and large-scale refactors using GSR (Global Search & Replace). Always previews changes with dryRun before applying.",
+      "mode": "subagent",
+      "model": "opencode/claude-sonnet-4-6",
+      "temperature": 0.2,
+      "steps": 30,
+      "tools": {
+        "write": true,
+        "edit": true,
+        "bash": true,
+        "read": true,
+        "glob": true,
+        "grep": true,
+        "gsr": true
+      },
+      "permission": {
+        "edit": "allow",
+        "write": "allow",
+        "bash": {
+          "*": "allow"
+        }
+      }
+    },
+    "validator": {
+      "description": "Validator agent that reviews Worker's changes. Uses GSR Preview mode (dryRun) to verify proposed refactors before approval. Read-only access.",
+      "mode": "subagent",
+      "model": "opencode/claude-sonnet-4-6",
+      "temperature": 0.1,
+      "steps": 20,
+      "tools": {
+        "read": true,
+        "glob": true,
+        "grep": true,
+        "gsr": true,
+        "bash": true
+      },
+      "permission": {
+        "edit": "deny",
+        "write": "deny",
+        "bash": {
+          "git*": "allow",
+          "git diff*": "allow",
+          "git status*": "allow",
+          "*": "ask"
+        }
+      }
+    }
+  },
+  "provider": {
+    "opencode": {
+      "models": {
+        "claude-sonnet-4-6": {
+          "variants": {
+            "high": {
+              "thinking": {
+                "type": "enabled",
+                "budgetTokens": 16000
+              }
+            },
+            "medium": {
+              "thinking": {
+                "type": "enabled",
+                "budgetTokens": 8000
+              }
+            },
+            "low": {
+              "thinking": {
+                "type": "disabled"
+              }
+            }
+          }
+        },
+        "gpt-5.1-codex": {
+          "variants": {
+            "high": {
+              "reasoningEffort": "high",
+              "textVerbosity": "low"
+            },
+            "medium": {
+              "reasoningEffort": "medium",
+              "textVerbosity": "low"
+            },
+            "low": {
+              "reasoningEffort": "low",
+              "textVerbosity": "low"
+            }
+          }
+        }
+      }
+    }
+  }
+}
