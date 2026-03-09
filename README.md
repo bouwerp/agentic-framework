@@ -1,6 +1,9 @@
 # Orchestrator-Worker-Validator Framework
 
-An agentic framework for opencode that implements a three-tier collaboration pattern with a custom **GSR (Global Search & Replace)** tool for large-scale refactors.
+An agentic framework for opencode that implements a three-tier collaboration pattern with:
+- **GSR (Global Search & Replace)** for large-scale refactors
+- **Figma integration** for design-to-code workflows
+- **Dynamic model tiering** for optimal performance
 
 ## Architecture
 
@@ -12,16 +15,34 @@ An agentic framework for opencode that implements a three-tier collaboration pat
 │  - Coordinates
 └──────┬──────┘
        │
-       ├────────────┐
-       │            │
-       ▼            ▼
-┌──────────┐  ┌───────────┐
-│  Worker  │  │ Validator │
-│          │  │           │
-│ - Codes  │  │ - Reviews │
-│ - GSR    │  │ - GSR     │
-│ - Refactors     │ Preview │
-└──────────┘  └───────────┘
+       ├────────────┬──────────────┐
+       │            │              │
+       ▼            ▼              ▼
+┌──────────┐  ┌───────────┐  ┌──────────┐
+│  Worker  │  │ Validator │  │  Figma   │
+│          │  │           │  │  Tools   │
+│ - Codes  │  │ - Reviews │  │          │
+│ - GSR    │  │ - GSR     │  │ - REST   │
+│ - Figma  │  │ - Design  │  │ - OAuth  │
+└──────────┘  └───────────┘  └──────────┘
+```
+┌─────────────┐
+│Orchestrator │ (Primary Agent)
+│  - Plans    │
+│  - Delegates│
+│  - Coordinates
+└──────┬──────┘
+       │
+       ├────────────┬──────────────┐
+       │            │              │
+       ▼            ▼              ▼
+┌──────────┐  ┌───────────┐  ┌──────────┐
+│  Worker  │  │ Validator │  │  Figma   │
+│          │  │           │  │  Tools   │
+│ - Codes  │  │ - Reviews │  │          │
+│ - GSR    │  │ - GSR     │  │ - REST   │
+│ - Figma  │  │ - Design  │  │ - OAuth  │
+└──────────┘  └───────────┘  └──────────┘
 ```
 
 ## Agents
@@ -36,14 +57,15 @@ An agentic framework for opencode that implements a three-tier collaboration pat
 - **Role**: Implementation and large-scale refactors
 - **Model**: Claude Sonnet 4.6 (mid-tier, configurable)
 - **Mode**: Subagent (invoked by Orchestrator)
-- **Key Tools**: `write`, `edit`, `bash`, `gsr`
+- **Key Tools**: `write`, `edit`, `bash`, `gsr`, `figma-rest`, `figma-oauth`
+- **Permissions**: Full write/edit/bash access
 
 ### Validator (Subagent)
 - **Role**: Quality assurance and approval
 - **Model**: Claude Sonnet 4.6 (mid-tier, configurable)
 - **Mode**: Subagent (invoked by Orchestrator)
-- **Key Tools**: `read`, `gsr` (preview mode), `grep`
-- **Permissions**: Read-only (no write/edit)
+- **Key Tools**: `read`, `gsr`, `grep`, `figma-rest`
+- **Permissions**: Read-only (no write/edit), git commands allowed
 
 ## GSR Tool (Global Search & Replace)
 
@@ -143,6 +165,8 @@ Use the `variant_cycle` keybind in the TUI to switch between model tiers during 
 
 ## Workflow
 
+### Standard Code Changes
+
 1. **User** provides task to Orchestrator
 2. **Orchestrator** breaks down task and delegates to Worker
 3. **Worker** implements:
@@ -153,6 +177,72 @@ Use the `variant_cycle` keybind in the TUI to switch between model tiers during 
 6. **Validator** reviews GSR preview output and verifies changes
 7. **Validator** approves or rejects with feedback
 8. **Orchestrator** either completes task or sends back to Worker
+
+### Figma Design Implementation
+
+1. **User** provides Figma URL and requirements
+2. **Orchestrator** delegates to Worker with design specs
+3. **Worker** extracts design data:
+   - `get_variables` - Extract design tokens (colors, spacing, typography)
+   - `get_node` - Get component structure
+   - `get_image` - Get visual reference screenshot
+4. **Worker** implements code based on design
+5. **Validator** validates implementation:
+   - Compare colors against design tokens
+   - Verify spacing matches token values
+   - Check visual fidelity against screenshot
+   - Search for hardcoded values that should use tokens
+6. **Validator** approves or requests fixes
+7. **Orchestrator** reports completion or iterates
+
+### Example Figma Workflow
+
+```bash
+# User request
+opencode run "Implement the login page from this Figma design: https://www.figma.com/file/ABC123?node-id=456-789"
+
+# Framework executes:
+# 1. Worker: get_variables --file_key 'ABC123'
+# 2. Worker: get_node --file_key 'ABC123' --node_id '456-789'
+# 3. Worker: get_image --file_key 'ABC123' --node_id '456-789' --scale 2
+# 4. Worker: Implement React component with design tokens
+# 5. Validator: Verify implementation matches design tokens
+# 6. Validator: Check for hardcoded colors/spacing
+# 7. Orchestrator: Report completion
+```
+
+### Figma Design Implementation
+
+1. **User** provides Figma URL and requirements
+2. **Orchestrator** delegates to Worker with design specs
+3. **Worker** extracts design data:
+   - `get_variables` - Extract design tokens (colors, spacing, typography)
+   - `get_node` - Get component structure
+   - `get_image` - Get visual reference screenshot
+4. **Worker** implements code based on design
+5. **Validator** validates implementation:
+   - Compare colors against design tokens
+   - Verify spacing matches token values
+   - Check visual fidelity against screenshot
+   - Search for hardcoded values that should use tokens
+6. **Validator** approves or requests fixes
+7. **Orchestrator** reports completion or iterates
+
+### Example Figma Workflow
+
+```bash
+# User request
+opencode run "Implement the login page from this Figma design: https://www.figma.com/file/ABC123?node-id=456-789"
+
+# Framework executes:
+# 1. Worker: get_variables --file_key 'ABC123'
+# 2. Worker: get_node --file_key 'ABC123' --node_id '456-789'
+# 3. Worker: get_image --file_key 'ABC123' --node_id '456-789' --scale 2
+# 4. Worker: Implement React component with design tokens
+# 5. Validator: Verify implementation matches design tokens
+# 6. Validator: Check for hardcoded colors/spacing
+# 7. Orchestrator: Report completion
+```
 
 ## Installation
 
@@ -165,12 +255,35 @@ Use the `variant_cycle` keybind in the TUI to switch between model tiers during 
 ```
 .opencode/
 ├── agents/
-│   ├── orchestrator.md  # Primary coordinator agent
-│   ├── worker.md        # Implementation agent with GSR
-│   └── validator.md     # Review agent with GSR Preview
-└── tools/
-    └── gsr.ts           # Global Search & Replace tool
-opencode.json            # Configuration with model tiering
+│   ├── orchestrator.md    # Primary coordinator agent
+│   ├── worker.md          # Implementation agent with GSR + Figma
+│   └── validator.md       # Review agent with design validation
+├── tools/
+│   ├── gsr.ts             # Global Search & Replace tool
+│   ├── figma-rest.ts      # Figma REST API tools
+│   └── figma-oauth.ts     # Figma OAuth authentication tools
+├── skills/
+│   ├── figma-interaction/ # Universal Figma skill (MCP + REST)
+│   ├── jira/              # JIRA interaction skill
+│   └── confluence/        # Confluence interaction skill
+└── README.md              # This file
+opencode.json              # Configuration with agents + model tiering
+```
+.opencode/
+├── agents/
+│   ├── orchestrator.md    # Primary coordinator agent
+│   ├── worker.md          # Implementation agent with GSR + Figma
+│   └── validator.md       # Review agent with design validation
+├── tools/
+│   ├── gsr.ts             # Global Search & Replace tool
+│   ├── figma-rest.ts      # Figma REST API tools
+│   └── figma-oauth.ts     # Figma OAuth authentication tools
+├── skills/
+│   ├── figma-interaction/ # Universal Figma skill (MCP + REST)
+│   ├── jira/              # JIRA interaction skill
+│   └── confluence/        # Confluence interaction skill
+└── README.md              # This file
+opencode.json              # Configuration with agents + model tiering
 ```
 
 ## Configuration

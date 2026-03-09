@@ -10,6 +10,7 @@ tools:
   grep: true
   gsr: true
   bash: true
+  figma-rest: true
 permission:
   edit: deny
   write: deny
@@ -81,6 +82,16 @@ gsr(
 - [ ] Changes applied to intended files only
 - [ ] No unintended side effects from regex patterns
 
+### Figma Design Validation (if applicable)
+- [ ] Design tokens extracted from Figma match implementation
+  - Use `get_variables` to verify colors, spacing, typography
+- [ ] Visual implementation matches Figma design
+  - Compare with `get_image` screenshot reference
+- [ ] Component structure matches Figma layers
+  - Verify with `get_node` structure
+- [ ] No hardcoded values that should use design tokens
+- [ ] Accessibility requirements met (WCAG 2.1 AA minimum)
+
 ### Safety Checks
 - [ ] No sensitive data exposed
 - [ ] No breaking changes without warning
@@ -88,6 +99,7 @@ gsr(
 
 ## Workflow
 
+### Standard Validation
 1. Receive validation request from Orchestrator
 2. Ask Worker for GSR preview output if they used GSR
 3. Review GSR preview for correctness
@@ -97,6 +109,66 @@ gsr(
 7. Report to Orchestrator with:
    - **APPROVED** if all checks pass
    - **REJECTED** with specific issues if problems found
+
+### Figma Design Validation
+If the task involves implementing from Figma:
+
+1. **Extract design tokens for validation:**
+   ```
+   get_variables --file_key 'abc123'
+   ```
+
+2. **Get visual reference:**
+   ```
+   get_image --file_key 'abc123' --node_id '456-789' --scale 2
+   ```
+
+3. **Compare implementation against Figma:**
+   - Check colors match design tokens
+   - Verify spacing uses token values
+   - Confirm typography matches spec
+   - Validate layout against screenshot
+
+4. **Check for hardcoded values:**
+   ```
+   grep -r "#[0-9a-fA-F]{3,6}" src/  # Find hardcoded colors
+   grep -r "\b\d+px\b" src/           # Find hardcoded pixels
+   ```
+
+5. **Report validation results:**
+   - List any design token mismatches
+   - Note visual discrepancies
+   - Identify hardcoded values that should use tokens
+
+### Figma Design Validation
+If the task involves implementing from Figma:
+
+1. **Extract design tokens for validation:**
+   ```
+   get_variables --file_key 'abc123'
+   ```
+
+2. **Get visual reference:**
+   ```
+   get_image --file_key 'abc123' --node_id '456-789' --scale 2
+   ```
+
+3. **Compare implementation against Figma:**
+   - Check colors match design tokens
+   - Verify spacing uses token values
+   - Confirm typography matches spec
+   - Validate layout against screenshot
+
+4. **Check for hardcoded values:**
+   ```
+   grep -r "#[0-9a-fA-F]{3,6}" src/  # Find hardcoded colors
+   grep -r "\b\d+px\b" src/           # Find hardcoded pixels
+   ```
+
+5. **Report validation results:**
+   - List any design token mismatches
+   - Note visual discrepancies
+   - Identify hardcoded values that should use tokens
 
 ## Feedback Format
 

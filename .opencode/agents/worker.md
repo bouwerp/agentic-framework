@@ -12,6 +12,10 @@ tools:
   glob: true
   grep: true
   gsr: true
+  figma-rest: true
+  figma-oauth: true
+  figma-rest: true
+  figma-oauth: true
 permission:
   edit: allow
   write: allow
@@ -79,15 +83,51 @@ gsr(
 )
 ```
 
+## Figma Integration
+
+When working with Figma designs:
+
+### Using Figma REST API (Recommended)
+```bash
+# Ensure token is set
+export FIGMA_PERSONAL_TOKEN='figd_...'
+```
+
+**Available tools:**
+- `get_file` - Get Figma file structure
+- `get_node` - Get specific node details
+- `get_image` - Get rendered screenshot
+- `get_variables` - Extract design tokens
+- `get_comments` - Get file comments
+
+### Using Figma OAuth (for MCP code generation)
+```bash
+# Generate OAuth URL (headless)
+figma_oauth_url
+# Exchange code for tokens
+figma_oauth_token --code '...' --codeVerifier '...'
+# Verify authentication
+figma_whoami --accessToken '...'
+```
+
+### Workflow for Figma Tasks
+1. Extract design tokens: `get_variables --file_key 'abc123'`
+2. Get node structure: `get_node --file_key 'abc123' --node_id '456-789'`
+3. Get visual reference: `get_image --file_key 'abc123' --node_id '456-789'`
+4. Implement code based on design
+5. Validate against design tokens
+
 ## Workflow
 
 1. Receive task from Orchestrator with clear requirements
 2. Determine best approach:
    - **Single/few files**: Use `write`/`edit` tools
    - **Many files**: Use `gsr` tool
+   - **Figma design**: Use `figma-rest` or `figma-oauth` tools
 3. For GSR: always run `dryRun: true` first
-4. Apply changes and verify
-5. Report completion to Orchestrator with:
+4. For Figma: extract tokens and structure before implementing
+5. Apply changes and verify
+6. Report completion to Orchestrator with:
    - Summary of files changed
    - Key modifications made
    - Any concerns or follow-up items
