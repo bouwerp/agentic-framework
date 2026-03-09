@@ -20,23 +20,47 @@ Use this skill when:
 
 ## Authentication Setup
 
-### Priority Order for Credentials
+### Recommended: MCP Server with Personal Access Token
 
-1. **MCP Server with OAuth** (highest priority - recommended)
-   - Official Figma MCP server at `https://mcp.figma.com/mcp`
-   - Automatic OAuth authentication
-   - Tokens stored securely by opencode
-   - Best for: Most users, automatic token refresh
+The Figma MCP server supports **both OAuth and Personal Access Tokens (PAT)**. Using PAT is simpler and doesn't require browser authentication.
 
-2. **Personal Access Token (PAT)** (fallback)
-   - Environment variable: `FIGMA_PERSONAL_TOKEN`
-   - Used for REST API when MCP is unavailable
-   - Manual token management
-   - Best for: Automation, CI/CD, MCP fallback
+**Step 1: Generate Token**
+1. Go to: https://www.figma.com/developers/api#access-tokens
+2. Click "Get personal access token"
+3. Copy the token (starts with `figd_`)
 
-### MCP Server Setup (Primary)
+**Step 2: Set Environment Variable**
+```bash
+# Add to ~/.zshrc or ~/.bashrc for persistence
+export FIGMA_PERSONAL_TOKEN='figd_your-token-here'
+```
 
-The Figma MCP server is configured in your opencode config:
+**Step 3: MCP Configuration (uses PAT automatically)**
+```json
+{
+  "mcp": {
+    "figma": {
+      "type": "remote",
+      "url": "https://mcp.figma.com/mcp",
+      "enabled": true,
+      "oauth": false,
+      "headers": {
+        "Authorization": "Bearer {env:FIGMA_PERSONAL_TOKEN}"
+      }
+    }
+  }
+}
+```
+
+**Benefits of PAT with MCP:**
+- ✅ No browser OAuth flow
+- ✅ Token managed in environment (works in CI/CD)
+- ✅ All MCP tools available (`get_design_context`, `get_variable_defs`, etc.)
+- ✅ Simpler setup and maintenance
+
+### Alternative: OAuth Authentication
+
+If you prefer OAuth (automatic token refresh):
 
 ```json
 {
@@ -45,55 +69,36 @@ The Figma MCP server is configured in your opencode config:
       "type": "remote",
       "url": "https://mcp.figma.com/mcp",
       "oauth": {},
-      "enabled": true,
-      "timeout": 10000
+      "enabled": true
     }
   }
 }
 ```
 
-**Authenticate with MCP:**
+**Authenticate with OAuth:**
 ```bash
-# Trigger OAuth flow
 opencode mcp auth figma
-
-# Check auth status
-opencode mcp list
-
-# Logout and re-authenticate if needed
-opencode mcp logout figma
 ```
 
-The OAuth flow will:
-1. Open your browser automatically
-2. Prompt you to authorize opencode
-3. Store tokens in `~/.local/share/opencode/mcp-auth.json`
-4. Enable MCP tools for use
+This opens a browser for authorization. Tokens stored in `~/.local/share/opencode/mcp-auth.json`.
 
-### Personal Access Token (Fallback)
+### REST API Tools (Custom Implementation)
 
-If MCP is unavailable or you prefer REST API:
+If you want direct REST API access (without MCP overhead), use the custom `figma-rest` tools:
 
-**Step 1: Generate Token**
-1. Go to: https://www.figma.com/developers/api#access-tokens
-2. Click "Get personal access token"
-3. Copy the token (starts with `figd_`)
-4. Store securely (never commit to git)
+- `get_file` - Get file structure
+- `get_node` - Get specific node
+- `get_image` - Get rendered image
+- `get_variables` - Get design tokens
+- `get_comments` - Get file comments
 
-**Step 2: Set Environment Variable**
-```bash
-export FIGMA_PERSONAL_TOKEN='figd_your-token-here'
-```
+These use the same `FIGMA_PERSONAL_TOKEN` environment variable but bypass the MCP server entirely.
 
-**Step 3: Use in REST API Calls**
-```bash
-FIGMA_TOKEN="$FIGMA_PERSONAL_TOKEN"
-
-# Test connection
-curl -H "X-Figma-Token: $FIGMA_TOKEN" \
-  "https://api.figma.com/v1/me" \
-  -H "Accept: application/json"
-```
+**When to use REST API tools instead of MCP:**
+- MCP server is unavailable or slow
+- You need fine-grained control over API calls
+- Working in environments where MCP isn't supported
+- Want to reduce context size (MCP adds tool descriptions)
 
 **Credential Helper Function:**
 ```bash

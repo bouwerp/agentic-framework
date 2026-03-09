@@ -79,10 +79,17 @@
     "figma": {
       "type": "remote",
       "url": "https://mcp.figma.com/mcp",
-      "oauth": {},
-      "enabled": false,
+      "enabled": true,
       "timeout": 10000,
-      "_comment": "Disabled: Use REST API tools instead. Enable and run 'opencode mcp auth figma' for OAuth"
+      "headers": {
+        "Authorization": "Bearer {env:FIGMA_PERSONAL_TOKEN}"
+      },
+      "oauth": false,
+      "_comment": "Using PAT instead of OAuth. Set FIGMA_PERSONAL_TOKEN env var."
+    }
+  },
+      "oauth": false,
+      "_comment": "Using PAT instead of OAuth. Set FIGMA_PERSONAL_TOKEN env var."
     }
   },
   "provider": {
