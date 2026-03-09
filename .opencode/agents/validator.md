@@ -1,7 +1,8 @@
 ---
 description: Validator agent that reviews Worker's changes using GSR Preview mode (dryRun) before approving. Ensures code quality, correctness, and alignment with requirements.
 mode: subagent
-model: opencode/claude-sonnet-4-6
+model: ollama/qwen3-coder:480b-cloud
+fallback: ollama/qwen3-coder:30b
 temperature: 0.1
 steps: 20
 tools:

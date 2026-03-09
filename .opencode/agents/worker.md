@@ -1,7 +1,8 @@
 ---
 description: Worker agent that implements code changes delegated by the Orchestrator. Uses GSR (Global Search & Replace) tool for large-scale refactors across the repository.
 mode: subagent
-model: opencode/claude-sonnet-4-6
+model: ollama/qwen3-coder:480b-cloud
+fallback: ollama/qwen3-coder:30b
 temperature: 0.2
 steps: 30
 tools:

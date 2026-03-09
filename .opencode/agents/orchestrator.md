@@ -1,7 +1,8 @@
 ---
 description: Orchestrator agent that coordinates tasks between Worker and Validator agents. Breaks down complex tasks, delegates to workers, and validates results before completion.
 mode: primary
-model: opencode/claude-sonnet-4-6
+model: openrouter/moonshotai/kimi-k2.5
+fallback: openrouter/moonshotai/kimi-k2
 temperature: 0.3
 steps: 50
 permission:
