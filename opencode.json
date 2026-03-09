@@ -19,68 +19,6 @@
           "orchestrator-*": "allow",
           "worker": "allow",
           "validator": "allow"
-        },
-        "bash": {
-          "*": "ask"
-        },
-        "edit": "ask",
-        "write": "ask"
-      }
-    },
-    "worker": {
-      "description": "Worker agent that implements code changes and large-scale refactors using GSR (Global Search & Replace). Always previews changes with dryRun before applying.",
-      "mode": "subagent",
-      "model": "opencode/claude-sonnet-4-6",
-      "temperature": 0.2,
-      "steps": 30,
-      "tools": {
-        "write": true,
-        "edit": true,
-        "bash": true,
-        "read": true,
-        "glob": true,
-        "grep": true,
-        "gsr": true
-      },
-      "permission": {
-        "edit": "allow",
-        "write": "allow",
-        "bash": {
-          "*": "allow"
-        }
-      }
-    },
-    "validator": {
-      "description": "Validator agent that reviews Worker's changes. Uses GSR Preview mode (dryRun) to verify proposed refactors before approval. Read-only access.",
-      "mode": "subagent",
-      "model": "opencode/claude-sonnet-4-6",
-      "temperature": 0.1,
-      "steps": 20,
-      "tools": {
-        "read": true,
-        "glob": true,
-        "grep": true,
-        "gsr": true,
-        "bash": true
-      },
-      "permission": {
-        "edit": "deny",
-        "write": "deny",
-        "bash": {
-          "git*": "allow",
-          "git diff*": "allow",
-          "git status*": "allow",
-          "*": "ask"
-        }
-      }
-    }
-  },
-  "mcp": {
-    "figma": {
-      "type": "remote",
-      "url": "https://mcp.figma.com/mcp",
-      "enabled": false
-    }
   },
   "provider": {
     "ollama": {
