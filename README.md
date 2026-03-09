@@ -8,70 +8,70 @@ An agentic framework for opencode that implements a three-tier collaboration pat
 ## Architecture
 
 ```
-┌─────────────┐
-│Orchestrator │ (Primary Agent)
-│  - Plans    │
-│  - Delegates│
-│  - Coordinates
-└──────┬──────┘
-       │
-       ├────────────┬──────────────┐
-       │            │              │
-       ▼            ▼              ▼
-┌──────────┐  ┌───────────┐  ┌──────────┐
-│  Worker  │  │ Validator │  │  Figma   │
-│          │  │           │  │  Tools   │
-│ - Codes  │  │ - Reviews │  │          │
-│ - GSR    │  │ - GSR     │  │ - REST   │
-│ - Figma  │  │ - Design  │  │ - OAuth  │
-└──────────┘  └───────────┘  └──────────┘
-```
-┌─────────────┐
-│Orchestrator │ (Primary Agent)
-│  - Plans    │
-│  - Delegates│
-│  - Coordinates
-└──────┬──────┘
-       │
-       ├────────────┬──────────────┐
-       │            │              │
-       ▼            ▼              ▼
-┌──────────┐  ┌───────────┐  ┌──────────┐
-│  Worker  │  │ Validator │  │  Figma   │
-│          │  │           │  │  Tools   │
-│ - Codes  │  │ - Reviews │  │          │
-│ - GSR    │  │ - GSR     │  │ - REST   │
-│ - Figma  │  │ - Design  │  │ - OAuth  │
-└──────────┘  └───────────┘  └──────────┘
+┌─────────────────┐
+│  Orchestrator   │ (Primary Agent - Kimi 2.5)
+│                 │
+│  • Plans        │
+│  • Delegates    │
+│  • Coordinates  │
+└────────┬────────┘
+         │
+    ┌────┴────┐
+    │         │
+    ▼         ▼
+┌─────────┐ ┌───────────┐
+│ Worker  │ │ Validator │
+│         │ │           │
+│ Qwen    │ │ Qwen      │
+│ Coder   │ │ Coder     │
+│         │ │           │
+│ • GSR   │ │ • Reviews │
+│ • Figma │ │ • Design  │
+│ • Code  │ │   Validation│
+└─────────┘ └───────────┘
 ```
 
 ## Agents
 
-### Orchestrator (Primary)
-- **Role**: Task breakdown, delegation, and coordination
-- **Model**: Claude Sonnet 4.6 (mid-tier, configurable)
-- **Mode**: Primary (user-facing)
-- **Key Tools**: `task`, `read`, `bash` (with approval)
+### Orchestrator (Primary Agent)
+
+| Property | Value |
+|----------|-------|
+| **Model** | `openrouter/moonshotai/kimi-k2.5` |
+| **Fallback** | `openrouter/moonshotai/kimi-k2` |
+| **Mode** | Primary (user-facing) |
+| **Role** | Task breakdown, delegation, coordination |
+| **Key Tools** | `task`, `read`, `bash` (with approval) |
 
 ### Worker (Subagent)
-- **Role**: Implementation and large-scale refactors
-- **Model**: Claude Sonnet 4.6 (mid-tier, configurable)
-- **Mode**: Subagent (invoked by Orchestrator)
-- **Key Tools**: `write`, `edit`, `bash`, `gsr`, `figma-rest`, `figma-oauth`
-- **Permissions**: Full write/edit/bash access
+
+| Property | Value |
+|----------|-------|
+| **Model** | `openrouter/qwen/qwen3-coder-plus` |
+| **Fallback** | `openrouter/qwen/qwen3-coder` |
+| **Mode** | Subagent (invoked by Orchestrator) |
+| **Role** | Implementation and large-scale refactors |
+| **Key Tools** | `write`, `edit`, `bash`, `gsr`, `figma-rest`, `figma-oauth` |
+| **Permissions** | Full write/edit/bash access |
 
 ### Validator (Subagent)
-- **Role**: Quality assurance and approval
-- **Model**: Claude Sonnet 4.6 (mid-tier, configurable)
-- **Mode**: Subagent (invoked by Orchestrator)
-- **Key Tools**: `read`, `gsr`, `grep`, `figma-rest`
-- **Permissions**: Read-only (no write/edit), git commands allowed
 
-## GSR Tool (Global Search & Replace)
+| Property | Value |
+|----------|-------|
+| **Model** | `openrouter/qwen/qwen3-coder-plus` |
+| **Fallback** | `openrouter/qwen/qwen3-coder` |
+| **Mode** | Subagent (invoked by Orchestrator) |
+| **Role** | Quality assurance and approval |
+| **Key Tools** | `read`, `gsr`, `grep`, `figma-rest` |
+| **Permissions** | Read-only (no write/edit), git commands allowed |
 
-The custom `gsr` tool performs precise, large-scale code refactors across the entire repository without manually opening each file.
+## Tools
 
-### Arguments
+### GSR (Global Search & Replace)
+
+The custom `gsr` tool performs precise, large-scale code refactors across the entire repository.
+
+**Arguments:**
 
 | Argument | Type | Default | Description |
 |----------|------|---------|-------------|
@@ -83,87 +83,49 @@ The custom `gsr` tool performs precise, large-scale code refactors across the en
 | `ignoreCase` | boolean | `false` | Case-insensitive search |
 | `wholeWord` | boolean | `false` | Match whole words only |
 
-### GSR Preview Mode
-
-Always run with `dryRun: true` first to preview changes:
+**Example Usage:**
 
 ```typescript
 // Preview: rename function across all TypeScript files
-gsr(
+gsr({
   search: "oldFunctionName",
   replace: "newFunctionName",
   pattern: "**/*.ts",
   wholeWord: true,
-  dryRun: true    // <-- GSR Preview mode
-)
+  dryRun: true
+})
 
 // Apply after review
-gsr(
+gsr({
   search: "oldFunctionName",
   replace: "newFunctionName",
   pattern: "**/*.ts",
   wholeWord: true,
   dryRun: false
-)
-```
-
-### Example Use Cases
-
-```typescript
-// 1. Rename a function everywhere
-gsr({ search: "getUser", replace: "fetchUser", wholeWord: true, dryRun: true })
-
-// 2. Update import paths with regex
-gsr({
-  search: "from '\\.\\./utils/(\\w+)'",
-  replace: "from '@/utils/$1'",
-  includeRegex: true,
-  pattern: "**/*.ts",
-  dryRun: true
-})
-
-// 3. Replace deprecated API
-gsr({
-  search: "ReactDOM.render",
-  replace: "createRoot",
-  pattern: "**/*.{tsx,ts}",
-  dryRun: true
-})
-
-// 4. Change config values across files
-gsr({
-  search: "API_URL = 'http://localhost:3000'",
-  replace: "API_URL = 'https://api.example.com'",
-  dryRun: true
 })
 ```
 
-## Dynamic Model Tiering
+### Figma Tools
 
-The framework supports dynamic tiering through model variants:
+**REST API Tools (`figma-rest.ts`):**
+- `get_file` - Get Figma file structure
+- `get_node` - Get specific node details
+- `get_image` - Get rendered screenshot
+- `get_variables` - Extract design tokens
+- `get_comments` - Get file comments
 
-### Claude Models
-```json
-{
-  "high": { "thinking": { "budgetTokens": 16000 } },
-  "medium": { "thinking": { "budgetTokens": 8000 } },
-  "low": { "thinking": { "disabled": true } }
-}
+**OAuth Tools (`figma-oauth.ts`):**
+- `figma_oauth_url` - Generate OAuth URL for headless auth
+- `figma_oauth_token` - Exchange code for tokens
+- `figma_oauth_refresh` - Refresh expired tokens
+- `figma_whoami` - Verify authentication
+
+**Setup:**
+```bash
+export FIGMA_PERSONAL_TOKEN='figd_your-token'
 ```
 
-### GPT Models
-```json
-{
-  "high": { "reasoningEffort": "high" },
-  "medium": { "reasoningEffort": "medium" },
-  "low": { "reasoningEffort": "low" }
-}
-```
-
-### Switching Tiers
-Use the `variant_cycle` keybind in the TUI to switch between model tiers during a session.
-
-## Workflow
+## Workflows
 
 ### Standard Code Changes
 
@@ -195,54 +157,22 @@ Use the `variant_cycle` keybind in the TUI to switch between model tiers during 
 6. **Validator** approves or requests fixes
 7. **Orchestrator** reports completion or iterates
 
-### Example Figma Workflow
-
+**Example:**
 ```bash
-# User request
 opencode run "Implement the login page from this Figma design: https://www.figma.com/file/ABC123?node-id=456-789"
-
-# Framework executes:
-# 1. Worker: get_variables --file_key 'ABC123'
-# 2. Worker: get_node --file_key 'ABC123' --node_id '456-789'
-# 3. Worker: get_image --file_key 'ABC123' --node_id '456-789' --scale 2
-# 4. Worker: Implement React component with design tokens
-# 5. Validator: Verify implementation matches design tokens
-# 6. Validator: Check for hardcoded colors/spacing
-# 7. Orchestrator: Report completion
 ```
 
-### Figma Design Implementation
+## Model Tiering
 
-1. **User** provides Figma URL and requirements
-2. **Orchestrator** delegates to Worker with design specs
-3. **Worker** extracts design data:
-   - `get_variables` - Extract design tokens (colors, spacing, typography)
-   - `get_node` - Get component structure
-   - `get_image` - Get visual reference screenshot
-4. **Worker** implements code based on design
-5. **Validator** validates implementation:
-   - Compare colors against design tokens
-   - Verify spacing matches token values
-   - Check visual fidelity against screenshot
-   - Search for hardcoded values that should use tokens
-6. **Validator** approves or requests fixes
-7. **Orchestrator** reports completion or iterates
+All agents use OpenRouter models with automatic fallback:
 
-### Example Figma Workflow
+| Agent | Primary Model | Fallback Model |
+|-------|--------------|----------------|
+| **Orchestrator** | `kimi-k2.5` | `kimi-k2` |
+| **Worker** | `qwen3-coder-plus` | `qwen3-coder` |
+| **Validator** | `qwen3-coder-plus` | `qwen3-coder` |
 
-```bash
-# User request
-opencode run "Implement the login page from this Figma design: https://www.figma.com/file/ABC123?node-id=456-789"
-
-# Framework executes:
-# 1. Worker: get_variables --file_key 'ABC123'
-# 2. Worker: get_node --file_key 'ABC123' --node_id '456-789'
-# 3. Worker: get_image --file_key 'ABC123' --node_id '456-789' --scale 2
-# 4. Worker: Implement React component with design tokens
-# 5. Validator: Verify implementation matches design tokens
-# 6. Validator: Check for hardcoded colors/spacing
-# 7. Orchestrator: Report completion
-```
+**Switch tiers manually:** Use the `variant_cycle` keybind in the TUI.
 
 ## Installation
 
@@ -250,40 +180,25 @@ opencode run "Implement the login page from this Figma design: https://www.figma
 2. Add `opencode.json` to your project root
 3. Start opencode: `opencode run "your task"`
 
-## Files
+## Project Structure
 
 ```
 .opencode/
 ├── agents/
-│   ├── orchestrator.md    # Primary coordinator agent
-│   ├── worker.md          # Implementation agent with GSR + Figma
-│   └── validator.md       # Review agent with design validation
+│   ├── orchestrator.md    # Primary coordinator (Kimi 2.5)
+│   ├── worker.md          # Implementation (Qwen Coder)
+│   └── validator.md       # Review (Qwen Coder)
 ├── tools/
-│   ├── gsr.ts             # Global Search & Replace tool
-│   ├── figma-rest.ts      # Figma REST API tools
-│   └── figma-oauth.ts     # Figma OAuth authentication tools
-├── skills/
-│   ├── figma-interaction/ # Universal Figma skill (MCP + REST)
-│   ├── jira/              # JIRA interaction skill
-│   └── confluence/        # Confluence interaction skill
-└── README.md              # This file
-opencode.json              # Configuration with agents + model tiering
-```
-.opencode/
-├── agents/
-│   ├── orchestrator.md    # Primary coordinator agent
-│   ├── worker.md          # Implementation agent with GSR + Figma
-│   └── validator.md       # Review agent with design validation
-├── tools/
-│   ├── gsr.ts             # Global Search & Replace tool
-│   ├── figma-rest.ts      # Figma REST API tools
-│   └── figma-oauth.ts     # Figma OAuth authentication tools
-├── skills/
-│   ├── figma-interaction/ # Universal Figma skill (MCP + REST)
-│   ├── jira/              # JIRA interaction skill
-│   └── confluence/        # Confluence interaction skill
-└── README.md              # This file
-opencode.json              # Configuration with agents + model tiering
+│   ├── gsr.ts             # Global Search & Replace
+│   ├── figma-rest.ts      # Figma REST API
+│   └── figma-oauth.ts     # Figma OAuth
+└── skills/
+    ├── figma-interaction/ # Universal Figma skill
+    ├── jira/              # JIRA integration
+    └── confluence/        # Confluence integration
+
+opencode.json              # Agent + model configuration
+README.md                  # This file
 ```
 
 ## Configuration
@@ -297,15 +212,14 @@ Edit `opencode.json` to customize:
 ## Example Usage
 
 ```bash
-# Start with default Orchestrator
+# GSR refactor
 opencode run "Rename all instances of 'getUser' to 'fetchUser' across the codebase"
 
-# The framework will:
-# 1. Orchestrator delegates to Worker
-# 2. Worker runs GSR with dryRun: true to preview
-# 3. Worker applies changes after preview looks good
-# 4. Validator reviews the GSR preview and output
-# 5. Orchestrator reports completion
+# Figma implementation
+opencode run "Implement the login page from this Figma: https://www.figma.com/file/ABC123?node-id=456-789"
+
+# With Plan mode (recommended)
+opencode run --mode=plan "Add dark mode toggle to settings page"
 ```
 
 ## License
