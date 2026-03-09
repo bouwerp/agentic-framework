@@ -1,12 +1,126 @@
 ---
 name: figma-interaction
 description: This skill should be used when the user asks to "generate code from Figma", "extract design tokens", "view Figma design", "create design system docs", or works with Figma designs. Provides guidance on using Figma MCP server (primary) and REST API (fallback) with OAuth and PAT authentication.
-version: 1.0.0
+version: 2.0.0
 ---
 
 # Figma Interaction
 
 This skill provides guidance on interacting with Figma designs via the official MCP server (primary) and REST API (fallback).
+
+## Quick Start by Platform
+
+<details>
+<summary><strong>OpenCode</strong> - Setup Instructions</summary>
+
+```bash
+# Option A: REST API with PAT (recommended, no OAuth)
+export FIGMA_PERSONAL_TOKEN='figd_...'
+
+# Option B: MCP with OAuth (for code generation)
+opencode mcp auth figma  # Opens browser
+
+# Or headless OAuth
+figma_oauth_url  # Copy URL to browser
+figma_oauth_token --code '...' --codeVerifier '...'
+```
+
+</details>
+
+<details>
+<summary><strong>Claude Code</strong> - Setup Instructions</summary>
+
+```bash
+# Recommended: Install official plugin
+claude plugin install figma@claude-plugins-official
+
+# Or manual MCP setup
+claude mcp add --transport http figma https://mcp.figma.com/mcp
+claude mcp auth figma
+```
+
+</details>
+
+<details>
+<summary><strong>Cursor</strong> - Setup Instructions</summary>
+
+In Cursor chat:
+```
+/plugin-add figma
+```
+
+Or manually: Settings → Cursor Settings → MCP → Add server with URL `https://mcp.figma.com/mcp`
+
+</details>
+
+<details>
+<summary><strong>Gemini</strong> - Setup Instructions</summary>
+
+MCP support is limited. Use REST API:
+```bash
+export FIGMA_PERSONAL_TOKEN='figd_...'
+```
+
+</details>
+
+---
+
+## Quick Start by Platform
+
+<details>
+<summary><strong>OpenCode</strong> - Setup Instructions</summary>
+
+```bash
+# Option A: REST API with PAT (recommended, no OAuth)
+export FIGMA_PERSONAL_TOKEN='figd_...'
+
+# Option B: MCP with OAuth (for code generation)
+opencode mcp auth figma  # Opens browser
+
+# Or headless OAuth
+figma_oauth_url  # Copy URL to browser
+figma_oauth_token --code '...' --codeVerifier '...'
+```
+
+</details>
+
+<details>
+<summary><strong>Claude Code</strong> - Setup Instructions</summary>
+
+```bash
+# Recommended: Install official plugin
+claude plugin install figma@claude-plugins-official
+
+# Or manual MCP setup
+claude mcp add --transport http figma https://mcp.figma.com/mcp
+claude mcp auth figma
+```
+
+</details>
+
+<details>
+<summary><strong>Cursor</strong> - Setup Instructions</summary>
+
+In Cursor chat:
+```
+/plugin-add figma
+```
+
+Or manually: Settings → Cursor Settings → MCP → Add server with URL `https://mcp.figma.com/mcp`
+
+</details>
+
+<details>
+<summary><strong>Gemini</strong> - Setup Instructions</summary>
+
+MCP support is limited. Use REST API:
+```bash
+export FIGMA_PERSONAL_TOKEN='figd_...'
+```
+
+</details>
+
+---
 
 ## Overview
 
@@ -18,11 +132,207 @@ Use this skill when:
 - Taking screenshots for visual reference
 - Working with Figma MCP server or REST API
 
-## Authentication Setup
+## MCP Integration by Platform
 
-### Option 1: Personal Access Token with REST API Tools (Recommended for opencode)
+The Figma MCP server (`https://mcp.figma.com/mcp`) can be integrated with multiple AI coding assistants. Setup varies by platform.
 
-**Note**: The Figma MCP server requires OAuth authentication. For opencode, we recommend using the custom REST API tools (`figma-rest.ts`) with a Personal Access Token instead.
+---
+
+### OpenCode
+
+**Configuration** (`~/.config/opencode/opencode.json`):
+```json
+{
+  "mcp": {
+    "figma": {
+      "type": "remote",
+      "url": "https://mcp.figma.com/mcp",
+      "oauth": {},
+      "enabled": true
+    }
+  }
+}
+```
+
+**Authenticate:**
+```bash
+# Automatic (opens browser)
+opencode mcp auth figma
+
+# Headless (manual copy-paste)
+# 1. Generate OAuth URL
+figma_oauth_url
+# 2. Copy URL to browser and authorize
+# 3. Exchange code for tokens
+figma_oauth_token --code 'your-code' --codeVerifier 'your-verifier'
+```
+
+**Verify:**
+```bash
+opencode mcp list
+```
+
+**Usage:**
+```bash
+opencode run "Generate React code from this Figma: https://www.figma.com/file/ABC123?node-id=456-789"
+```
+
+**Notes:**
+- OAuth tokens stored in `~/.local/share/opencode/mcp-auth.json`
+- For PAT-only usage, use `figma-rest` tools instead (no MCP config needed)
+
+---
+
+### Claude Code
+
+**Method 1: Official Plugin (Recommended)**
+```bash
+# Install Figma plugin (includes MCP + Agent Skills)
+claude plugin install figma@claude-plugins-official
+
+# Verify installation
+claude plugins list
+```
+
+**Method 2: Manual MCP Configuration**
+```bash
+# Add MCP server
+claude mcp add --transport http figma https://mcp.figma.com/mcp
+
+# Authenticate (opens browser)
+claude mcp auth figma
+
+# Headless: same as OpenCode (use figma_oauth_url tool)
+```
+
+**Usage:**
+```bash
+# In Claude Code chat
+claude "Generate code from this Figma design: https://www.figma.com/file/ABC123?node-id=456-789"
+
+# Or with specific requirements
+claude "Implement this Figma frame in React + Tailwind, using components from src/components/ui: <url>"
+```
+
+**Features:**
+- Full MCP tool support (`get_design_context`, `get_variable_defs`, etc.)
+- Agent Skills for common workflows
+- Automatic token refresh
+- Plugin includes rules for proper asset handling
+
+**Manage:**
+```bash
+claude mcp list          # List all MCP servers
+claude mcp get figma     # Get Figma server details
+claude mcp remove figma  # Remove Figma server
+```
+
+---
+
+### Cursor (cursor-agent)
+
+**Method 1: Figma Plugin (Recommended)**
+In Cursor chat:
+```
+/plugin-add figma
+```
+
+This installs:
+- MCP server configuration
+- Agent Skills for Figma workflows
+- Rules for asset handling
+
+**Method 2: Manual MCP Configuration**
+1. Open **Cursor → Settings → Cursor Settings**
+2. Go to **MCP** tab
+3. Click **+ Add new global MCP server**
+4. Enter configuration:
+```json
+{
+  "mcpServers": {
+    "figma": {
+      "url": "https://mcp.figma.com/mcp"
+    }
+  }
+}
+```
+
+**Authenticate:**
+- Cursor will automatically prompt for OAuth when you first use a Figma tool
+- Click "Authorize" in the browser popup
+- Tokens stored in Cursor's internal storage
+
+**Usage:**
+```
+# In Cursor agent chat
+Implement this design from Figma: https://www.figma.com/file/ABC123?node-id=456-789
+
+# With framework specification
+Create a Vue 3 component with Composition API from this Figma frame: <url>
+```
+
+**Features:**
+- Integrated with Cursor's agent mode
+- Automatic context management
+- Screenshot previews in chat
+- Component suggestions via Code Connect
+
+---
+
+### Google Gemini (Gemini CLI / Studio)
+
+**Note:** Gemini's MCP support is limited compared to Claude Code/Cursor. Use REST API approach.
+
+**Configuration** (if MCP supported):
+```json
+{
+  "mcp": {
+    "figma": {
+      "url": "https://mcp.figma.com/mcp",
+      "auth": "oauth"
+    }
+  }
+}
+```
+
+**Recommended: REST API with PAT**
+```bash
+# Set environment variable
+export FIGMA_PERSONAL_TOKEN='figd_your-token'
+
+# Use in Gemini prompts
+"Get the design tokens from this Figma file using the API: <file-key>"
+```
+
+**Gemini Code Assist** (VS Code extension):
+- No native MCP support
+- Use Figma plugins for VS Code instead
+- Or use REST API approach
+
+---
+
+### Platform Comparison
+
+| Platform | MCP Support | OAuth Flow | Headless | Plugin Available |
+|----------|-------------|------------|----------|------------------|
+| **OpenCode** | ✅ Full | Browser + Manual | ✅ Yes | ❌ No |
+| **Claude Code** | ✅ Full + Skills | Browser + Manual | ✅ Yes | ✅ Official |
+| **Cursor** | ✅ Full | Browser | ⚠️ Limited | ✅ Official |
+| **Gemini** | ⚠️ Limited | Browser | ❌ No | ❌ No |
+
+**Recommendations:**
+- **Best Figma integration**: Claude Code (official plugin with Agent Skills)
+- **Best for teams**: Cursor (integrated with full IDE)
+- **Best for automation**: OpenCode (REST API tools + headless OAuth)
+- **Fallback**: All platforms support REST API with PAT
+
+---
+
+## Authentication Methods
+
+### Method 1: Personal Access Token with REST API Tools (Universal)
+
+Works on all platforms, no OAuth required.
 
 **Step 1: Generate Token**
 1. Go to: https://www.figma.com/developers/api#access-tokens
@@ -42,36 +352,15 @@ Available tools: `get_file`, `get_node`, `get_image`, `get_variables`, `get_comm
 - ✅ No browser OAuth flow
 - ✅ Token managed in environment (works in CI/CD)
 - ✅ Direct API access with full control
-- ✅ Works in opencode without OAuth
+- ✅ Works on all platforms
 
 **Limitations:**
 - ⚠️ No `get_design_context` (code generation) - you get raw Figma data
 - ⚠️ Manual parsing of node structures required
 
-### Option 2: OAuth with Figma MCP Server
+### Method 2: OAuth with Figma MCP Server
 
-If you need `get_design_context` for code generation, use the official MCP server with OAuth:
-
-**Configuration:**
-```json
-{
-  "mcp": {
-    "figma": {
-      "type": "remote",
-      "url": "https://mcp.figma.com/mcp",
-      "oauth": {},
-      "enabled": true
-    }
-  }
-}
-```
-
-**Authenticate:**
-```bash
-opencode mcp auth figma
-```
-
-This opens a browser for OAuth authorization.
+For platforms with full MCP support (OpenCode, Claude Code, Cursor).
 
 **Benefits:**
 - ✅ `get_design_context` - generates React+Tailwind code automatically
@@ -80,66 +369,31 @@ This opens a browser for OAuth authorization.
 - ✅ Automatic token refresh
 
 **Limitations:**
-- ⚠️ Requires browser OAuth flow (but can be manual - see "Headless OAuth" below)
-- ⚠️ Tokens stored in opencode-specific location
-- ⚠️ Not portable to other tools
+- ⚠️ Requires browser OAuth flow (or manual headless flow)
+- ⚠️ Tokens stored in platform-specific location
+- ⚠️ Not portable between platforms
 
 ### Headless/Manual OAuth Flow
 
-For headless environments (SSH, containers, remote servers) where automatic browser opening isn't available:
+For headless environments (SSH, containers, remote servers):
 
 **Using OAuth Tools:**
-The `figma_oauth_url` tool generates a copy-paste authorization URL:
-
-```
+```bash
 # Generate OAuth URL
 figma_oauth_url
 
-# Output includes:
-{
-  "authorizationUrl": "https://www.figma.com/oauth/mcp?client_id=...&state=...",
-  "state": "random-state",
-  "codeVerifier": "pkce-verifier",
-  "instructions": [...]
-}
-```
+# Output includes authorization URL, state, and codeVerifier
+# Copy URL to browser, authorize, then exchange code for tokens
+figma_oauth_token --code 'your-code' --codeVerifier 'your-verifier'
 
-**Steps:**
-1. Run `figma_oauth_url` to generate authorization URL
-2. Copy the URL and open in any browser (local or remote)
-3. Authorize the application
-4. Copy the authorization code from the redirect URL (even if page fails to load)
-5. Run `figma_oauth_token` with the code and codeVerifier
-6. Save the access token and refresh token securely
+# Save tokens
+export FIGMA_ACCESS_TOKEN='...'
+export FIGMA_REFRESH_TOKEN='...'
 
-**Store tokens for future use:**
-```bash
-# Save to environment
-export FIGMA_ACCESS_TOKEN='your-access-token'
-export FIGMA_REFRESH_TOKEN='your-refresh-token'
-
-# Or save to file
-echo '{"access_token": "...", "refresh_token": "..."}' > ~/.figma-tokens.json
-```
-
-**Refresh tokens when expired:**
-```
+# Refresh when expired
 figma_oauth_refresh --refreshToken 'your-refresh-token'
 ```
 
-### Option 3: Use Claude Code for Figma Operations
-
-Claude Code has excellent Figma MCP support:
-
-```bash
-# Install Figma plugin
-claude plugin install figma@claude-plugins-official
-
-# Use Figma
-claude "Generate code from this Figma: <url>"
-```
-
-Then use opencode for other tasks (GSR, JIRA, Confluence).
 
 ### REST API Tools (Custom Implementation)
 
