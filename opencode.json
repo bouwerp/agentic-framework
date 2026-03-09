@@ -12,6 +12,7 @@
       "description": "Orchestrator agent that coordinates tasks between Worker and Validator agents. Breaks down complex tasks, delegates to workers, and validates results before completion.",
       "mode": "primary",
       "model": "openrouter/moonshotai/kimi-k2.5",
+      "fallback": "openrouter/moonshotai/kimi-k2",
       "temperature": 0.3,
       "steps": 50,
       "permission": {
@@ -30,7 +31,8 @@
     "worker": {
       "description": "Worker agent that implements code changes and large-scale refactors using GSR (Global Search & Replace). Always previews changes with dryRun before applying.",
       "mode": "subagent",
-      "model": "ollama/qwen3-coder:480b-cloud",
+      "model": "openrouter/qwen/qwen3-coder-plus",
+      "fallback": "openrouter/qwen/qwen3-coder",
       "temperature": 0.2,
       "steps": 30,
       "tools": {
@@ -55,7 +57,8 @@
     "validator": {
       "description": "Validator agent that reviews Worker's changes. Uses GSR Preview mode (dryRun) to verify proposed refactors before approval. Read-only access.",
       "mode": "subagent",
-      "model": "ollama/qwen3-coder:480b-cloud",
+      "model": "openrouter/qwen/qwen3-coder-plus",
+      "fallback": "openrouter/qwen/qwen3-coder",
       "temperature": 0.1,
       "steps": 20,
       "tools": {
