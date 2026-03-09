@@ -1,8 +1,12 @@
 {
   "$schema": "https://opencode.ai/config.json",
   "default_agent": "orchestrator",
-  "model": "opencode/claude-sonnet-4-6",
-  "small_model": "opencode/claude-haiku-4-5",
+  "permission": {
+    "gunzip": "allow",
+    "find": "allow",
+    "cat": "allow",
+    "aws": "allow"
+  },
   "agent": {
     "orchestrator": {
       "description": "Orchestrator agent that coordinates tasks between Worker and Validator agents. Breaks down complex tasks, delegates to workers, and validates results before completion.",
@@ -71,7 +75,46 @@
       }
     }
   },
+  "mcp": {
+    "figma": {
+      "type": "remote",
+      "url": "https://mcp.figma.com/mcp",
+      "oauth": {},
+      "enabled": true,
+      "timeout": 10000
+    }
+  },
+  "mcp": {
+    "figma": {
+      "type": "remote",
+      "url": "https://mcp.figma.com/mcp",
+      "oauth": {},
+      "enabled": true,
+      "timeout": 10000
+    }
+  },
   "provider": {
+    "ollama": {
+      "npm": "@ai-sdk/openai-compatible",
+      "name": "Ollama (local)",
+      "options": {
+        "baseURL": "http://localhost:11434/v1"
+      },
+      "models": {
+        "qwen3-coder:480b-cloud": {
+          "name": "qwen3-coder:480b-cloud"
+        },
+        "qwen3-coder:30b": {
+          "name": "qwen3-coder:30b"
+        },
+        "deepseek-r1:8b": {
+          "name": "deepseek-r1:8b"
+        },
+        "llama3.1:8b": {
+          "name": "llama3.1:8b"
+        }
+      }
+    },
     "opencode": {
       "models": {
         "claude-sonnet-4-6": {
