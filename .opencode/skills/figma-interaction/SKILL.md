@@ -20,9 +20,9 @@ Use this skill when:
 
 ## Authentication Setup
 
-### Recommended: MCP Server with Personal Access Token
+### Option 1: Personal Access Token with REST API Tools (Recommended for opencode)
 
-The Figma MCP server supports **both OAuth and Personal Access Tokens (PAT)**. Using PAT is simpler and doesn't require browser authentication.
+**Note**: The Figma MCP server requires OAuth authentication. For opencode, we recommend using the custom REST API tools (`figma-rest.ts`) with a Personal Access Token instead.
 
 **Step 1: Generate Token**
 1. Go to: https://www.figma.com/developers/api#access-tokens
@@ -35,33 +35,24 @@ The Figma MCP server supports **both OAuth and Personal Access Tokens (PAT)**. U
 export FIGMA_PERSONAL_TOKEN='figd_your-token-here'
 ```
 
-**Step 3: MCP Configuration (uses PAT automatically)**
-```json
-{
-  "mcp": {
-    "figma": {
-      "type": "remote",
-      "url": "https://mcp.figma.com/mcp",
-      "enabled": true,
-      "oauth": false,
-      "headers": {
-        "Authorization": "Bearer {env:FIGMA_PERSONAL_TOKEN}"
-      }
-    }
-  }
-}
-```
+**Step 3: Use REST API Tools**
+Available tools: `get_file`, `get_node`, `get_image`, `get_variables`, `get_comments`
 
-**Benefits of PAT with MCP:**
+**Benefits:**
 - ✅ No browser OAuth flow
 - ✅ Token managed in environment (works in CI/CD)
-- ✅ All MCP tools available (`get_design_context`, `get_variable_defs`, etc.)
-- ✅ Simpler setup and maintenance
+- ✅ Direct API access with full control
+- ✅ Works in opencode without OAuth
 
-### Alternative: OAuth Authentication
+**Limitations:**
+- ⚠️ No `get_design_context` (code generation) - you get raw Figma data
+- ⚠️ Manual parsing of node structures required
 
-If you prefer OAuth (automatic token refresh):
+### Option 2: OAuth with Figma MCP Server
 
+If you need `get_design_context` for code generation, use the official MCP server with OAuth:
+
+**Configuration:**
 ```json
 {
   "mcp": {
@@ -75,12 +66,37 @@ If you prefer OAuth (automatic token refresh):
 }
 ```
 
-**Authenticate with OAuth:**
+**Authenticate:**
 ```bash
 opencode mcp auth figma
 ```
 
-This opens a browser for authorization. Tokens stored in `~/.local/share/opencode/mcp-auth.json`.
+This opens a browser for OAuth authorization.
+
+**Benefits:**
+- ✅ `get_design_context` - generates React+Tailwind code automatically
+- ✅ `get_variable_defs` - extracts design tokens
+- ✅ All official Figma MCP tools
+- ✅ Automatic token refresh
+
+**Limitations:**
+- ⚠️ Requires browser OAuth flow
+- ⚠️ Tokens stored in opencode-specific location
+- ⚠️ Not portable to other tools
+
+### Option 3: Use Claude Code for Figma Operations
+
+Claude Code has excellent Figma MCP support:
+
+```bash
+# Install Figma plugin
+claude plugin install figma@claude-plugins-official
+
+# Use Figma
+claude "Generate code from this Figma: <url>"
+```
+
+Then use opencode for other tasks (GSR, JIRA, Confluence).
 
 ### REST API Tools (Custom Implementation)
 

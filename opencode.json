@@ -79,13 +79,9 @@
     "figma": {
       "type": "remote",
       "url": "https://mcp.figma.com/mcp",
-      "enabled": true,
+      "enabled": false,
       "timeout": 10000,
-      "headers": {
-        "Authorization": "Bearer {env:FIGMA_PERSONAL_TOKEN}"
-      },
-      "oauth": false,
-      "_comment": "Using PAT instead of OAuth. Set FIGMA_PERSONAL_TOKEN env var."
+      "_comment": "MCP disabled - use figma-rest tools with FIGMA_PERSONAL_TOKEN env var instead"
     }
   },
   "provider": {
