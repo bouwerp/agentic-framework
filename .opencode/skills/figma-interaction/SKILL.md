@@ -80,9 +80,52 @@ This opens a browser for OAuth authorization.
 - ✅ Automatic token refresh
 
 **Limitations:**
-- ⚠️ Requires browser OAuth flow
+- ⚠️ Requires browser OAuth flow (but can be manual - see "Headless OAuth" below)
 - ⚠️ Tokens stored in opencode-specific location
 - ⚠️ Not portable to other tools
+
+### Headless/Manual OAuth Flow
+
+For headless environments (SSH, containers, remote servers) where automatic browser opening isn't available:
+
+**Using OAuth Tools:**
+The `figma_oauth_url` tool generates a copy-paste authorization URL:
+
+```
+# Generate OAuth URL
+figma_oauth_url
+
+# Output includes:
+{
+  "authorizationUrl": "https://www.figma.com/oauth/mcp?client_id=...&state=...",
+  "state": "random-state",
+  "codeVerifier": "pkce-verifier",
+  "instructions": [...]
+}
+```
+
+**Steps:**
+1. Run `figma_oauth_url` to generate authorization URL
+2. Copy the URL and open in any browser (local or remote)
+3. Authorize the application
+4. Copy the authorization code from the redirect URL (even if page fails to load)
+5. Run `figma_oauth_token` with the code and codeVerifier
+6. Save the access token and refresh token securely
+
+**Store tokens for future use:**
+```bash
+# Save to environment
+export FIGMA_ACCESS_TOKEN='your-access-token'
+export FIGMA_REFRESH_TOKEN='your-refresh-token'
+
+# Or save to file
+echo '{"access_token": "...", "refresh_token": "..."}' > ~/.figma-tokens.json
+```
+
+**Refresh tokens when expired:**
+```
+figma_oauth_refresh --refreshToken 'your-refresh-token'
+```
 
 ### Option 3: Use Claude Code for Figma Operations
 
