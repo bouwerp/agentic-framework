@@ -79,9 +79,7 @@
     "figma": {
       "type": "remote",
       "url": "https://mcp.figma.com/mcp",
-      "enabled": false,
-      "timeout": 10000,
-      "_comment": "MCP disabled - use figma-rest tools with FIGMA_PERSONAL_TOKEN env var instead"
+      "enabled": false
     }
   },
   "provider": {
