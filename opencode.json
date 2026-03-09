@@ -84,15 +84,6 @@
       "timeout": 10000
     }
   },
-  "mcp": {
-    "figma": {
-      "type": "remote",
-      "url": "https://mcp.figma.com/mcp",
-      "oauth": {},
-      "enabled": true,
-      "timeout": 10000
-    }
-  },
   "provider": {
     "ollama": {
       "npm": "@ai-sdk/openai-compatible",
