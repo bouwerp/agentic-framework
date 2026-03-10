@@ -2,7 +2,7 @@
 description: Validator agent that reviews Worker's changes using GSR Preview mode (dryRun) before approving. Ensures code quality, correctness, and alignment with requirements.
 mode: subagent
 model: openrouter/qwen/qwen3-coder-plus
-fallback: openrouter/qwen/qwen3-coder
+fallback: openrouter/qwen/qwen3-coder-30b-a3b-instruct-30b-a3b-instruct
 temperature: 0.1
 steps: 20
 tools:

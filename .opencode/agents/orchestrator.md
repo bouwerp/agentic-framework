@@ -2,7 +2,7 @@
 description: Orchestrator agent that coordinates tasks between Worker and Validator agents. Breaks down complex tasks, delegates to workers, and validates results before completion. Uses Figma tools for design analysis during planning.
 mode: primary
 model: openrouter/moonshotai/kimi-k2.5
-fallback: openrouter/moonshotai/kimi-k2
+fallback: openrouter/moonshotai/kimi-k2-0905-0905
 temperature: 0.3
 steps: 50
 tools:

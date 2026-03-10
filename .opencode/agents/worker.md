@@ -2,7 +2,7 @@
 description: Worker agent that implements code changes delegated by the Orchestrator. Uses GSR (Global Search & Replace) tool for large-scale refactors across the repository.
 mode: subagent
 model: openrouter/qwen/qwen3-coder-plus
-fallback: openrouter/qwen/qwen3-coder
+fallback: openrouter/qwen/qwen3-coder-30b-a3b-instruct-30b-a3b-instruct
 temperature: 0.2
 steps: 30
 tools:
