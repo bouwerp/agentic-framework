@@ -41,7 +41,7 @@
       "description": "Worker agent that implements code changes and large-scale refactors using GSR (Global Search & Replace). Always previews changes with dryRun before applying.",
       "mode": "subagent",
       "model": "openrouter/qwen/qwen3-coder-plus",
-      "fallback": "openrouter/qwen/qwen3-coder-30b-a3b-instruct",
+      "fallback": "openrouter/qwen/qwen3-30b-a3b-thinking-2507",
       "temperature": 0.2,
       "steps": 30,
       "tools": {
@@ -67,7 +67,7 @@
       "description": "Validator agent that reviews Worker's changes. Uses GSR Preview mode (dryRun) to verify proposed refactors before approval. Read-only access.",
       "mode": "subagent",
       "model": "openrouter/qwen/qwen3-coder-plus",
-      "fallback": "openrouter/qwen/qwen3-coder-30b-a3b-instruct",
+      "fallback": "openrouter/qwen/qwen3-30b-a3b-thinking-2507",
       "temperature": 0.1,
       "steps": 20,
       "tools": {
