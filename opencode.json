@@ -9,12 +9,34 @@
   },
   "agent": {
     "orchestrator": {
-      "description": "Orchestrator agent that coordinates tasks between Worker and Validator agents. Breaks down complex tasks, delegates to workers, and validates results before completion.",
+      "description": "Orchestrator agent that coordinates tasks between Worker and Validator agents. Breaks down complex tasks, delegates to workers, and validates results before completion. Uses Figma tools for design analysis during planning.",
       "mode": "primary",
       "model": "openrouter/moonshotai/kimi-k2.5",
       "fallback": "openrouter/moonshotai/kimi-k2",
       "temperature": 0.3,
       "steps": 50,
+      "tools": {
+        "task": true,
+        "read": true,
+        "bash": true,
+        "grep": true,
+        "glob": true,
+        "figma-rest": true,
+        "figma-oauth": true
+      },
+      "permission": {
+        "task": {
+          "orchestrator-*": "allow",
+          "worker": "allow",
+          "validator": "allow"
+        },
+        "bash": {
+          "*": "ask"
+        },
+        "edit": "ask",
+        "write": "ask"
+      }
+    },
       "permission": {
         "task": {
           "orchestrator-*": "allow",

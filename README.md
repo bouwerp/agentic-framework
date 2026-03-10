@@ -134,8 +134,9 @@ Get your tokens:
 | **Model** | `openrouter/moonshotai/kimi-k2.5` |
 | **Fallback** | `openrouter/moonshotai/kimi-k2` |
 | **Mode** | Primary (user-facing) |
-| **Role** | Task breakdown, delegation, coordination |
-| **Key Tools** | `task`, `read`, `bash` (with approval) |
+| **Role** | Task breakdown, delegation, coordination, **design analysis** |
+| **Key Tools** | `task`, `read`, `bash`, `figma-rest`, `figma-oauth` |
+| **Planning** | Extracts design tokens BEFORE delegating to Worker |
 
 ### Worker (Subagent)
 
@@ -237,12 +238,16 @@ export FIGMA_PERSONAL_TOKEN='figd_your-token'
 ### Figma Design Implementation
 
 1. **User** provides Figma URL and requirements
-2. **Orchestrator** delegates to Worker with design specs
-3. **Worker** extracts design data:
-   - `get_variables` - Extract design tokens (colors, spacing, typography)
-   - `get_node` - Get component structure
-   - `get_image` - Get visual reference screenshot
-4. **Worker** implements code based on design
+2. **Orchestrator** analyzes design FIRST:
+   - `get_variables` - Extract design tokens
+   - `get_node` - Analyze component structure
+   - `get_image` - Get visual reference
+   - Creates implementation plan based on findings
+3. **Orchestrator** delegates to Worker WITH complete design context:
+   - Provides design token values
+   - Includes visual reference
+   - Specifies component structure
+4. **Worker** implements code based on provided design data
 5. **Validator** validates implementation:
    - Compare colors against design tokens
    - Verify spacing matches token values
