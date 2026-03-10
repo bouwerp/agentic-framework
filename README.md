@@ -372,3 +372,57 @@ This framework is designed for OpenCode, but can be adapted for other AI coding 
 ## License
 
 MIT
+
+## Known Limitations
+
+### Subagent Model Support
+
+Opencode doesn't fully support subagents with different models via the Task tool. The O-W-V framework works best when:
+
+1. **Orchestrator** (Kimi 2.5) does the planning and coordination
+2. **Worker role** - Orchestrator switches to "Worker mode" and implements directly
+3. **Validator role** - Orchestrator switches to "Validator mode" and reviews
+
+This is a limitation of opencode's current subagent implementation, not the framework design.
+
+### Workaround
+
+Use role-based prompting instead of Task delegation:
+
+```
+"As the Worker, implement this feature..."
+"Now switch to Validator role and review the changes..."
+```
+
+The agent definitions still provide value as:
+- Role documentation
+- Permission templates
+- Skill definitions
+- Tool configurations
+
+## Known Limitations
+
+### Subagent Model Support
+
+Opencode doesn't fully support subagents with different models via the Task tool. The O-W-V framework works best when:
+
+1. **Orchestrator** (Kimi 2.5) does the planning and coordination
+2. **Worker role** - Orchestrator switches to "Worker mode" and implements directly
+3. **Validator role** - Orchestrator switches to "Validator mode" and reviews
+
+This is a limitation of opencode's current subagent implementation, not the framework design.
+
+### Workaround
+
+Use role-based prompting instead of Task delegation:
+
+```
+"As the Worker, implement this feature..."
+"Now switch to Validator role and review the changes..."
+```
+
+The agent definitions still provide value as:
+- Role documentation
+- Permission templates
+- Skill definitions
+- Tool configurations
