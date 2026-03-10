@@ -5,6 +5,100 @@ An agentic framework for opencode that implements a three-tier collaboration pat
 - **Figma integration** for design-to-code workflows
 - **Dynamic model tiering** for optimal performance
 
+## Quick Start
+
+### Option 1: Automatic Installation (Recommended)
+
+```bash
+# Clone the repository
+git clone https://github.com/bouwerp/agentic-framework.git
+cd agentic-framework
+
+# Run the installer
+./scripts/install.sh
+```
+
+The installer will:
+- Copy agents, tools, and skills to your opencode config
+- Optionally merge the configuration
+- Provide setup instructions for API tokens
+
+### Option 2: Manual Installation
+
+```bash
+# Copy agents
+cp -r .opencode/agents ~/.config/opencode/
+
+# Copy tools
+cp -r .opencode/tools ~/.config/opencode/
+
+# Copy skills
+cp -r .opencode/skills ~/.config/opencode/
+
+# Copy configuration
+cp opencode.json ~/.config/opencode/
+```
+
+### Setup API Tokens
+
+```bash
+# Add to ~/.zshrc or ~/.bashrc
+export FIGMA_PERSONAL_TOKEN='figd_your-token'
+export ATLASSIAN_API_TOKEN='your-token'
+export ATLASSIAN_EMAIL='your.email@example.com'
+```
+
+Get your tokens:
+- **Figma**: https://www.figma.com/developers/api#access-tokens
+- **Atlassian**: https://id.atlassian.com/manage-profile/security/api-tokens
+
+## Quick Start
+
+### Option 1: Automatic Installation (Recommended)
+
+```bash
+# Clone the repository
+git clone https://github.com/bouwerp/agentic-framework.git
+cd agentic-framework
+
+# Run the installer
+./scripts/install.sh
+```
+
+The installer will:
+- Copy agents, tools, and skills to your opencode config
+- Optionally merge the configuration
+- Provide setup instructions for API tokens
+
+### Option 2: Manual Installation
+
+```bash
+# Copy agents
+cp -r .opencode/agents ~/.config/opencode/
+
+# Copy tools
+cp -r .opencode/tools ~/.config/opencode/
+
+# Copy skills
+cp -r .opencode/skills ~/.config/opencode/
+
+# Copy configuration
+cp opencode.json ~/.config/opencode/
+```
+
+### Setup API Tokens
+
+```bash
+# Add to ~/.zshrc or ~/.bashrc
+export FIGMA_PERSONAL_TOKEN='figd_your-token'
+export ATLASSIAN_API_TOKEN='your-token'
+export ATLASSIAN_EMAIL='your.email@example.com'
+```
+
+Get your tokens:
+- **Figma**: https://www.figma.com/developers/api#access-tokens
+- **Atlassian**: https://id.atlassian.com/manage-profile/security/api-tokens
+
 ## Architecture
 
 ```
