@@ -316,6 +316,54 @@ opencode run "Implement the login page from this Figma: https://www.figma.com/fi
 opencode run --mode=plan "Add dark mode toggle to settings page"
 ```
 
+## Other Platforms
+
+This framework is designed for OpenCode, but can be adapted for other AI coding assistants:
+
+### Claude Code
+- **Setup**: See [`platforms/claude-code/README.md`](platforms/claude-code/README.md)
+- **Approach**: Use Claude Skills + MCP plugins
+- **Best for**: Figma-heavy workflows with official plugin support
+
+### Gemini
+- **Setup**: See [`platforms/gemini/README.md`](platforms/gemini/README.md)
+- **Approach**: Use system instructions + REST API
+- **Best for**: Multi-turn conversations, free tier usage
+
+### Platform Comparison
+
+| Feature | OpenCode | Claude Code | Gemini |
+|---------|----------|-------------|---------|
+| Agent Config | Markdown files | Skills | System instructions |
+| Tool System | TypeScript | Skills + MCP | Extensions + REST |
+| MCP Support | Full | Full | Limited |
+| Figma Integration | REST + OAuth | MCP (official) | REST API only |
+| Best For | Custom workflows | Figma-heavy | Conversations |
+
+## Other Platforms
+
+This framework is designed for OpenCode, but can be adapted for other AI coding assistants:
+
+### Claude Code
+- **Setup**: See [`platforms/claude-code/README.md`](platforms/claude-code/README.md)
+- **Approach**: Use Claude Skills + MCP plugins
+- **Best for**: Figma-heavy workflows with official plugin support
+
+### Gemini
+- **Setup**: See [`platforms/gemini/README.md`](platforms/gemini/README.md)
+- **Approach**: Use system instructions + REST API
+- **Best for**: Multi-turn conversations, free tier usage
+
+### Platform Comparison
+
+| Feature | OpenCode | Claude Code | Gemini |
+|---------|----------|-------------|---------|
+| Agent Config | Markdown files | Skills | System instructions |
+| Tool System | TypeScript | Skills + MCP | Extensions + REST |
+| MCP Support | Full | Full | Limited |
+| Figma Integration | REST + OAuth | MCP (official) | REST API only |
+| Best For | Custom workflows | Figma-heavy | Conversations |
+
 ## License
 
 MIT
