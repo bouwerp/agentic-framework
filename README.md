@@ -1,428 +1,203 @@
-# Orchestrator-Worker-Validator Framework
+# AI Assistant Skills & Tools
 
-An agentic framework for opencode that implements a three-tier collaboration pattern with:
-- **GSR (Global Search & Replace)** for large-scale refactors
-- **Figma integration** for design-to-code workflows
-- **Dynamic model tiering** for optimal performance
+A collection of universal skills and tools for AI coding assistants (OpenCode, Claude Code, Gemini, Cursor).
 
-## Quick Start
+## What's Included
 
-### Option 1: Automatic Installation (Recommended)
+### Skills (3)
+Universal skills that work across all platforms:
 
-```bash
-# Clone the repository
-git clone https://github.com/bouwerp/agentic-framework.git
-cd agentic-framework
+- **`figma-interaction/`** - Figma integration via MCP or REST API
+  - Generate code from Figma designs
+  - Extract design tokens (colors, spacing, typography)
+  - Create design system documentation
+  - Supports OAuth and Personal Access Tokens
 
-# Run the installer
-./scripts/install.sh
-```
+- **`jira/`** - JIRA integration with ADF support
+  - View and update JIRA issues
+  - Work with Atlassian Document Format
+  - OAuth and PAT authentication
 
-The installer will:
-- Copy agents, tools, and skills to your opencode config
-- Optionally merge the configuration
-- Provide setup instructions for API tokens
+- **`confluence/`** - Confluence integration with ADF support
+  - Read/write Confluence pages
+  - Search documentation
+  - Summarize content
+  - OAuth and PAT authentication
 
-### Option 2: Manual Installation
+### Tools (3)
+Custom TypeScript tools for OpenCode:
 
-```bash
-# Copy agents
-cp -r .opencode/agents ~/.config/opencode/
+- **`gsr.ts`** - Global Search & Replace
+  - Large-scale code refactors
+  - Regex support
+  - Preview mode (dry-run)
+  - File pattern filtering
 
-# Copy tools
-cp -r .opencode/tools ~/.config/opencode/
+- **`figma-rest.ts`** - Figma REST API
+  - Get file structure
+  - Extract design tokens
+  - Get node details
+  - Get screenshots
 
-# Copy skills
-cp -r .opencode/skills ~/.config/opencode/
-
-# Copy configuration
-cp opencode.json ~/.config/opencode/
-```
-
-### Setup API Tokens
-
-```bash
-# Add to ~/.zshrc or ~/.bashrc
-export FIGMA_PERSONAL_TOKEN='figd_your-token'
-export ATLASSIAN_API_TOKEN='your-token'
-export ATLASSIAN_EMAIL='your.email@example.com'
-```
-
-Get your tokens:
-- **Figma**: https://www.figma.com/developers/api#access-tokens
-- **Atlassian**: https://id.atlassian.com/manage-profile/security/api-tokens
-
-## Quick Start
-
-### Option 1: Automatic Installation (Recommended)
-
-```bash
-# Clone the repository
-git clone https://github.com/bouwerp/agentic-framework.git
-cd agentic-framework
-
-# Run the installer
-./scripts/install.sh
-```
-
-The installer will:
-- Copy agents, tools, and skills to your opencode config
-- Optionally merge the configuration
-- Provide setup instructions for API tokens
-
-### Option 2: Manual Installation
-
-```bash
-# Copy agents
-cp -r .opencode/agents ~/.config/opencode/
-
-# Copy tools
-cp -r .opencode/tools ~/.config/opencode/
-
-# Copy skills
-cp -r .opencode/skills ~/.config/opencode/
-
-# Copy configuration
-cp opencode.json ~/.config/opencode/
-```
-
-### Setup API Tokens
-
-```bash
-# Add to ~/.zshrc or ~/.bashrc
-export FIGMA_PERSONAL_TOKEN='figd_your-token'
-export ATLASSIAN_API_TOKEN='your-token'
-export ATLASSIAN_EMAIL='your.email@example.com'
-```
-
-Get your tokens:
-- **Figma**: https://www.figma.com/developers/api#access-tokens
-- **Atlassian**: https://id.atlassian.com/manage-profile/security/api-tokens
-
-## Architecture
-
-```
-┌─────────────────┐
-│  Orchestrator   │ (Primary Agent - Kimi 2.5)
-│                 │
-│  • Plans        │
-│  • Delegates    │
-│  • Coordinates  │
-└────────┬────────┘
-         │
-    ┌────┴────┐
-    │         │
-    ▼         ▼
-┌─────────┐ ┌───────────┐
-│ Worker  │ │ Validator │
-│         │ │           │
-│ Qwen    │ │ Qwen      │
-│ Coder   │ │ Coder     │
-│         │ │           │
-│ • GSR   │ │ • Reviews │
-│ • Figma │ │ • Design  │
-│ • Code  │ │   Validation│
-└─────────┘ └───────────┘
-```
-
-## Agents
-
-### Orchestrator (Primary Agent)
-
-| Property | Value |
-|----------|-------|
-| **Model** | `openrouter/moonshotai/kimi-k2.5` |
-| **Fallback** | `openrouter/moonshotai/kimi-k2` |
-| **Mode** | Primary (user-facing) |
-| **Role** | Task breakdown, delegation, coordination, **design analysis** |
-| **Key Tools** | `task`, `read`, `bash`, `figma-rest`, `figma-oauth` |
-| **Planning** | Extracts design tokens BEFORE delegating to Worker |
-
-### Worker (Subagent)
-
-| Property | Value |
-|----------|-------|
-| **Model** | `openrouter/qwen/qwen3-coder-plus` |
-| **Fallback** | `openrouter/qwen/qwen3-coder` |
-| **Mode** | Subagent (invoked by Orchestrator) |
-| **Role** | Implementation and large-scale refactors |
-| **Key Tools** | `write`, `edit`, `bash`, `gsr`, `figma-rest`, `figma-oauth` |
-| **Permissions** | Full write/edit/bash access |
-
-### Validator (Subagent)
-
-| Property | Value |
-|----------|-------|
-| **Model** | `openrouter/qwen/qwen3-coder-plus` |
-| **Fallback** | `openrouter/qwen/qwen3-coder` |
-| **Mode** | Subagent (invoked by Orchestrator) |
-| **Role** | Quality assurance and approval |
-| **Key Tools** | `read`, `gsr`, `grep`, `figma-rest` |
-| **Permissions** | Read-only (no write/edit), git commands allowed |
-
-## Tools
-
-### GSR (Global Search & Replace)
-
-The custom `gsr` tool performs precise, large-scale code refactors across the entire repository.
-
-**Arguments:**
-
-| Argument | Type | Default | Description |
-|----------|------|---------|-------------|
-| `search` | string | required | Text or regex pattern to search for |
-| `replace` | string | required | Replacement text (use $1, $2 for capture groups) |
-| `pattern` | string | `**/*` | Glob pattern for files to search |
-| `includeRegex` | boolean | `false` | Treat search as regex |
-| `dryRun` | boolean | `false` | **Preview mode** - show changes without applying |
-| `ignoreCase` | boolean | `false` | Case-insensitive search |
-| `wholeWord` | boolean | `false` | Match whole words only |
-
-**Example Usage:**
-
-```typescript
-// Preview: rename function across all TypeScript files
-gsr({
-  search: "oldFunctionName",
-  replace: "newFunctionName",
-  pattern: "**/*.ts",
-  wholeWord: true,
-  dryRun: true
-})
-
-// Apply after review
-gsr({
-  search: "oldFunctionName",
-  replace: "newFunctionName",
-  pattern: "**/*.ts",
-  wholeWord: true,
-  dryRun: false
-})
-```
-
-### Figma Tools
-
-**REST API Tools (`figma-rest.ts`):**
-- `get_file` - Get Figma file structure
-- `get_node` - Get specific node details
-- `get_image` - Get rendered screenshot
-- `get_variables` - Extract design tokens
-- `get_comments` - Get file comments
-
-**OAuth Tools (`figma-oauth.ts`):**
-- `figma_oauth_url` - Generate OAuth URL for headless auth
-- `figma_oauth_token` - Exchange code for tokens
-- `figma_oauth_refresh` - Refresh expired tokens
-- `figma_whoami` - Verify authentication
-
-**Setup:**
-```bash
-export FIGMA_PERSONAL_TOKEN='figd_your-token'
-```
-
-## Workflows
-
-### Standard Code Changes
-
-1. **User** provides task to Orchestrator
-2. **Orchestrator** breaks down task and delegates to Worker
-3. **Worker** implements:
-   - Single/few files: uses `write`/`edit` tools
-   - Many files: uses `gsr` with `dryRun: true` first
-4. **Worker** applies GSR changes after preview looks correct
-5. **Orchestrator** requests validation from Validator
-6. **Validator** reviews GSR preview output and verifies changes
-7. **Validator** approves or rejects with feedback
-8. **Orchestrator** either completes task or sends back to Worker
-
-### Figma Design Implementation
-
-1. **User** provides Figma URL and requirements
-2. **Orchestrator** analyzes design FIRST:
-   - `get_variables` - Extract design tokens
-   - `get_node` - Analyze component structure
-   - `get_image` - Get visual reference
-   - Creates implementation plan based on findings
-3. **Orchestrator** delegates to Worker WITH complete design context:
-   - Provides design token values
-   - Includes visual reference
-   - Specifies component structure
-4. **Worker** implements code based on provided design data
-5. **Validator** validates implementation:
-   - Compare colors against design tokens
-   - Verify spacing matches token values
-   - Check visual fidelity against screenshot
-   - Search for hardcoded values that should use tokens
-6. **Validator** approves or requests fixes
-7. **Orchestrator** reports completion or iterates
-
-**Example:**
-```bash
-opencode run "Implement the login page from this Figma design: https://www.figma.com/file/ABC123?node-id=456-789"
-```
-
-## Model Tiering
-
-All agents use OpenRouter models with automatic fallback:
-
-| Agent | Primary Model | Fallback Model |
-|-------|--------------|----------------|
-| **Orchestrator** | `kimi-k2.5` | `kimi-k2` |
-| **Worker** | `qwen3-coder-plus` | `qwen3-coder` |
-| **Validator** | `qwen3-coder-plus` | `qwen3-coder` |
-
-**Switch tiers manually:** Use the `variant_cycle` keybind in the TUI.
+- **`figma-oauth.ts`** - Figma OAuth
+  - Headless OAuth flow
+  - Token management
+  - Token refresh
 
 ## Installation
 
-1. Copy `.opencode/` directory to your project root
-2. Add `opencode.json` to your project root
-3. Start opencode: `opencode run "your task"`
-
-## Project Structure
-
-```
-.opencode/
-├── agents/
-│   ├── orchestrator.md    # Primary coordinator (Kimi 2.5)
-│   ├── worker.md          # Implementation (Qwen Coder)
-│   └── validator.md       # Review (Qwen Coder)
-├── tools/
-│   ├── gsr.ts             # Global Search & Replace
-│   ├── figma-rest.ts      # Figma REST API
-│   └── figma-oauth.ts     # Figma OAuth
-└── skills/
-    ├── figma-interaction/ # Universal Figma skill
-    ├── jira/              # JIRA integration
-    └── confluence/        # Confluence integration
-
-opencode.json              # Agent + model configuration
-README.md                  # This file
-```
-
-## Configuration
-
-Edit `opencode.json` to customize:
-- Model selections per agent
-- Temperature and step limits
-- Tool permissions
-- Model variants for tiering
-
-## Example Usage
+### Quick Install (Auto-detects platform)
 
 ```bash
-# GSR refactor
-opencode run "Rename all instances of 'getUser' to 'fetchUser' across the codebase"
-
-# Figma implementation
-opencode run "Implement the login page from this Figma: https://www.figma.com/file/ABC123?node-id=456-789"
-
-# With Plan mode (recommended)
-opencode run --mode=plan "Add dark mode toggle to settings page"
+git clone https://github.com/bouwerp/agentic-framework.git
+cd agentic-framework
+./scripts/install.sh
+./scripts/verify.sh
 ```
 
-## Other Platforms
+### Platform-Specific Setup
 
-This framework is designed for OpenCode, but can be adapted for other AI coding assistants:
+#### OpenCode (Native Support)
 
-### Claude Code
-- **Setup**: See [`platforms/claude-code/README.md`](platforms/claude-code/README.md)
-- **Approach**: Use Claude Skills + MCP plugins
-- **Best for**: Figma-heavy workflows with official plugin support
+Best for: Custom workflows, full control
 
-### Gemini
-- **Setup**: See [`platforms/gemini/README.md`](platforms/gemini/README.md)
-- **Approach**: Use system instructions + REST API
-- **Best for**: Multi-turn conversations, free tier usage
+```bash
+./scripts/install.sh
+```
 
-### Platform Comparison
+Installs:
+- All 3 skills
+- All 3 TypeScript tools
+- Auto-approve permissions config
 
-| Feature | OpenCode | Claude Code | Gemini |
-|---------|----------|-------------|---------|
-| Agent Config | Markdown files | Skills | System instructions |
-| Tool System | TypeScript | Skills + MCP | Extensions + REST |
-| MCP Support | Full | Full | Limited |
-| Figma Integration | REST + OAuth | MCP (official) | REST API only |
-| Best For | Custom workflows | Figma-heavy | Conversations |
+#### Claude Code (Recommended)
 
-## Other Platforms
+Best for: Figma-heavy workflows, official plugin support
 
-This framework is designed for OpenCode, but can be adapted for other AI coding assistants:
+```bash
+# Install official plugins
+claude plugin install figma@claude-plugins-official
+claude plugin install jira@claude-plugins-official
+claude plugin install confluence@claude-plugins-official
 
-### Claude Code
-- **Setup**: See [`platforms/claude-code/README.md`](platforms/claude-code/README.md)
-- **Approach**: Use Claude Skills + MCP plugins
-- **Best for**: Figma-heavy workflows with official plugin support
+# Or manual MCP setup
+claude mcp add --transport http figma https://mcp.figma.com/mcp
+claude mcp auth figma
+```
 
-### Gemini
-- **Setup**: See [`platforms/gemini/README.md`](platforms/gemini/README.md)
-- **Approach**: Use system instructions + REST API
-- **Best for**: Multi-turn conversations, free tier usage
+#### Gemini
 
-### Platform Comparison
+Best for: Multi-turn conversations, free tier
 
-| Feature | OpenCode | Claude Code | Gemini |
-|---------|----------|-------------|---------|
-| Agent Config | Markdown files | Skills | System instructions |
-| Tool System | TypeScript | Skills + MCP | Extensions + REST |
-| MCP Support | Full | Full | Limited |
-| Figma Integration | REST + OAuth | MCP (official) | REST API only |
-| Best For | Custom workflows | Figma-heavy | Conversations |
+```bash
+./scripts/install.sh
+```
+
+Note: Uses REST API approach (limited MCP support)
+
+#### Cursor
+
+Best for: IDE integration, VS Code users
+
+```bash
+./scripts/install.sh
+
+# In Cursor chat:
+/plugin-add figma
+/plugin-add jira
+```
+
+## Environment Setup
+
+Add to your `~/.zshrc` or `~/.bashrc`:
+
+```bash
+# Figma Personal Access Token
+# Get from: https://www.figma.com/developers/api#access-tokens
+export FIGMA_PERSONAL_TOKEN='figd_your-token'
+
+# Atlassian API Token (for JIRA/Confluence)
+# Get from: https://id.atlassian.com/manage-profile/security/api-tokens
+export ATLASSIAN_API_TOKEN='your-token'
+export ATLASSIAN_EMAIL='your.email@example.com'
+export ATLASSIAN_SITE='your-domain.atlassian.net'
+```
+
+## Usage Examples
+
+### Figma Skills
+
+```bash
+# OpenCode
+opencode run "Get design tokens from this Figma: https://www.figma.com/file/ABC123"
+
+# Claude Code
+claude "Extract colors and spacing from this Figma design: <url>"
+
+# Gemini
+gemini --system="You are a designer" "Get variables from Figma file ABC123"
+```
+
+### GSR Tool (OpenCode only)
+
+```bash
+# Preview changes
+opencode run "Rename getUser to fetchUser with dryRun: true"
+
+# Apply changes
+opencode run "Rename getUser to fetchUser across all .ts files"
+```
+
+### JIRA Skills
+
+```bash
+opencode run "Get details for JIRA issue PROJ-123"
+claude "Update JIRA ticket PROJ-456 with status 'In Progress'"
+```
+
+## Platform Comparison
+
+| Feature | OpenCode | Claude Code | Gemini | Cursor |
+|---------|----------|-------------|---------|--------|
+| **Skills** | ✅ Full | ✅ Full | ✅ Full | ✅ Full |
+| **Tools** | ✅ TypeScript | ❌ MCP only | ❌ Shell scripts | ❌ MCP only |
+| **MCP** | ✅ Full | ✅ Full (best) | ⚠️ Limited | ✅ Full |
+| **Figma** | REST + OAuth | Official MCP | REST API | MCP plugin |
+| **JIRA** | REST + ADF | MCP plugin | REST API | MCP plugin |
+| **Confluence** | REST + ADF | MCP plugin | REST API | MCP plugin |
+
+## Repository Structure
+
+```
+agentic-framework/
+├── scripts/
+│   ├── install.sh          # Multi-platform installer
+│   └── verify.sh           # Installation verifier
+├── platforms/
+│   ├── claude-code/        # Claude-specific guide
+│   └── gemini/             # Gemini-specific guide
+├── .opencode/
+│   ├── tools/              # TypeScript tools (OpenCode only)
+│   │   ├── gsr.ts
+│   │   ├── figma-rest.ts
+│   │   └── figma-oauth.ts
+│   └── skills/             # Universal skills
+│       ├── figma-interaction/
+│       ├── jira/
+│       └── confluence/
+├── README.md               # This file
+├── INSTALL.md              # Detailed installation guide
+├── PLATFORMS.md            # Platform comparison
+└── opencode.json           # OpenCode configuration
+```
+
+## Documentation
+
+- **[INSTALL.md](INSTALL.md)** - Complete installation guide
+- **[PLATFORMS.md](PLATFORMS.md)** - Platform-specific details
+- **`platforms/claude-code/README.md`** - Claude Code setup
+- **`platforms/gemini/README.md`** - Gemini setup
 
 ## License
 
 MIT
-
-## Known Limitations
-
-### Subagent Model Support
-
-Opencode doesn't fully support subagents with different models via the Task tool. The O-W-V framework works best when:
-
-1. **Orchestrator** (Kimi 2.5) does the planning and coordination
-2. **Worker role** - Orchestrator switches to "Worker mode" and implements directly
-3. **Validator role** - Orchestrator switches to "Validator mode" and reviews
-
-This is a limitation of opencode's current subagent implementation, not the framework design.
-
-### Workaround
-
-Use role-based prompting instead of Task delegation:
-
-```
-"As the Worker, implement this feature..."
-"Now switch to Validator role and review the changes..."
-```
-
-The agent definitions still provide value as:
-- Role documentation
-- Permission templates
-- Skill definitions
-- Tool configurations
-
-## Known Limitations
-
-### Subagent Model Support
-
-Opencode doesn't fully support subagents with different models via the Task tool. The O-W-V framework works best when:
-
-1. **Orchestrator** (Kimi 2.5) does the planning and coordination
-2. **Worker role** - Orchestrator switches to "Worker mode" and implements directly
-3. **Validator role** - Orchestrator switches to "Validator mode" and reviews
-
-This is a limitation of opencode's current subagent implementation, not the framework design.
-
-### Workaround
-
-Use role-based prompting instead of Task delegation:
-
-```
-"As the Worker, implement this feature..."
-"Now switch to Validator role and review the changes..."
-```
-
-The agent definitions still provide value as:
-- Role documentation
-- Permission templates
-- Skill definitions
-- Tool configurations
