@@ -64,7 +64,7 @@ install_opencode() {
     echo -e "${YELLOW}Step 3/3: Installing skills...${NC}"
     if [ -d "$PROJECT_ROOT/.opencode/skills" ]; then
         cp -r "$PROJECT_ROOT/.opencode/skills/"* "$OPENCODE_DIR/skills/" 2>/dev/null || true
-        echo -e "${GREEN}✓${NC} Skills installed (figma-interaction, jira, confluence, github, planning-with-files)"
+        echo -e "${GREEN}✓${NC} Skills installed (figma-interaction, jira, confluence, github, planning-with-files, aws)"
     fi
     echo ""
 
@@ -91,7 +91,7 @@ install_claude_code() {
     if [ -d "$PROJECT_ROOT/.opencode/skills" ]; then
         cp -r "$PROJECT_ROOT/.opencode/skills/"* "$CLAUDE_DIR/skills/" 2>/dev/null || true
     fi
-    echo -e "${GREEN}✓${NC} Skills installed (figma-interaction, jira, confluence, github, planning-with-files)"
+    echo -e "${GREEN}✓${NC} Skills installed (figma-interaction, jira, confluence, github, planning-with-files, aws)"
     echo ""
 
     echo -e "${YELLOW}MCP Setup (optional):${NC}"
@@ -127,7 +127,7 @@ install_gemini() {
     if [ -d "$PROJECT_ROOT/.opencode/skills" ]; then
         cp -r "$PROJECT_ROOT/.opencode/skills/"* "$GEMINI_DIR/skills/" 2>/dev/null || true
     fi
-    echo -e "${GREEN}✓${NC} Skills installed (figma-interaction, jira, confluence, github, planning-with-files)"
+    echo -e "${GREEN}✓${NC} Skills installed (figma-interaction, jira, confluence, github, planning-with-files, aws)"
     echo ""
 
     echo -e "${YELLOW}Step 3/3: Installing tools...${NC}"
@@ -170,7 +170,7 @@ install_cursor() {
     if [ -d "$PROJECT_ROOT/.opencode/skills" ]; then
         cp -r "$PROJECT_ROOT/.opencode/skills/"* "$CURSOR_DIR/skills/" 2>/dev/null || true
     fi
-    echo -e "${GREEN}✓${NC} Skills installed (figma-interaction, jira, confluence, github, planning-with-files)"
+    echo -e "${GREEN}✓${NC} Skills installed (figma-interaction, jira, confluence, github, planning-with-files, aws)"
     echo ""
 
     echo -e "${YELLOW}MCP Setup (optional):${NC}"
@@ -204,7 +204,7 @@ install_pi() {
     if [ -d "$PROJECT_ROOT/platforms/pi" ]; then
         cp "$PROJECT_ROOT/platforms/pi/"*.md "$PI_DIR/skills/" 2>/dev/null || true
     fi
-    echo -e "${GREEN}✓${NC} Skills installed (figma-interaction, jira, confluence, github, planning-with-files)"
+    echo -e "${GREEN}✓${NC} Skills installed (figma-interaction, jira, confluence, github, planning-with-files, aws)"
     echo ""
 
     echo -e "${YELLOW}Note:${NC} Pi uses skills as capability packages with CLI tools."

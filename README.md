@@ -4,7 +4,7 @@ A collection of universal skills and tools for AI coding assistants (OpenCode, C
 
 ## What's Included
 
-### Skills (5)
+### Skills (6)
 Universal skills that work across all platforms:
 
 - **`figma-interaction/`** - Figma integration via MCP or REST API
@@ -37,6 +37,13 @@ Universal skills that work across all platforms:
   - Session recovery from context resets
   - Hierarchical plans for large tasks
   - Git checkpoint integration
+
+- **`aws/`** - AWS CLI interaction with safety-first patterns
+  - Read-first, confirm-before-mutating approach
+  - 16 service references: S3, EC2, Lambda, ECS, CloudFormation, IAM, CloudWatch, RDS, DynamoDB, SQS/SNS, Secrets Manager, SSM, ECR, Route53, Step Functions, Cost Explorer
+  - Command safety classification (safe/dangerous/destructive)
+  - JMESPath query patterns, pagination, waiters
+  - Credential management and cost awareness
 
 ### Tools (3)
 Custom TypeScript tools for OpenCode:
@@ -80,7 +87,7 @@ Best for: Custom workflows, full control
 ```
 
 Installs:
-- All 5 skills
+- All 6 skills
 - All 3 TypeScript tools
 - Auto-approve permissions config
 
@@ -195,7 +202,7 @@ pi -p "Resolve all review threads on PR #42 and post a summary"
 
 | Feature | OpenCode | Claude Code | Gemini | Cursor | Pi |
 |---------|----------|-------------|---------|--------|-----|
-| **Skills** | ✅ All 5 | ✅ All 5 | ✅ All 5 | ✅ All 5 | ✅ All 5 |
+| **Skills** | ✅ All 6 | ✅ All 6 | ✅ All 6 | ✅ All 6 | ✅ All 6 |
 | **Tools** | ✅ TypeScript | ❌ MCP only | ❌ Shell scripts | ❌ MCP only | ❌ CLI tools |
 | **MCP** | ✅ Full | ✅ Full (best) | ⚠️ Limited | ✅ Full | ❌ None |
 | **Figma** | REST + OAuth | Official MCP | REST API | MCP plugin | REST API |
@@ -224,7 +231,8 @@ agentic-framework/
 │       ├── jira/
 │       ├── confluence/
 │       ├── github/
-│       └── planning-with-files/
+│       ├── planning-with-files/
+│       └── aws/
 ├── README.md               # This file
 ├── INSTALL.md              # Detailed installation guide
 ├── PLATFORMS.md            # Platform comparison

@@ -18,12 +18,13 @@ cd agentic-framework
 
 The installer detects your platform and installs the appropriate components:
 
-### Skills (5) — All Platforms
+### Skills (6) — All Platforms
 - `figma-interaction/` - Figma integration via MCP or REST API
 - `jira/` - JIRA interaction with ADF support
 - `confluence/` - Confluence interaction with ADF support
 - `github/` - GitHub PR workflow via `gh` CLI
 - `planning-with-files/` - Persistent file-based planning methodology
+- `aws/` - AWS CLI interaction with safety-first patterns
 
 ### Tools (3) — OpenCode Only
 - `gsr.ts` - Global Search & Replace
@@ -37,7 +38,7 @@ The installer detects your platform and installs the appropriate components:
 
 | Component | OpenCode | Claude Code | Gemini | Cursor | Pi |
 |-----------|----------|-------------|--------|--------|-----|
-| **Skills** | All 5 | All 5 | All 5 | All 5 | All 5 |
+| **Skills** | All 6 | All 6 | All 6 | All 6 | All 6 |
 | **TypeScript tools** | All 3 | — | — | — | — |
 | **Shell tools** | — | — | gsr.sh | — | — |
 | **MCP setup** | — | Instructions | — | Instructions | — |
@@ -181,6 +182,7 @@ rm -rf ~/.config/opencode/skills/jira
 rm -rf ~/.config/opencode/skills/confluence
 rm -rf ~/.config/opencode/skills/github
 rm -rf ~/.config/opencode/skills/planning-with-files
+rm -rf ~/.config/opencode/skills/aws
 ```
 
 ### Claude Code
@@ -190,6 +192,7 @@ rm -rf ~/.claude/skills/jira
 rm -rf ~/.claude/skills/confluence
 rm -rf ~/.claude/skills/github
 rm -rf ~/.claude/skills/planning-with-files
+rm -rf ~/.claude/skills/aws
 ```
 
 ### Gemini
@@ -199,6 +202,7 @@ rm -rf ~/.gemini/skills/jira
 rm -rf ~/.gemini/skills/confluence
 rm -rf ~/.gemini/skills/github
 rm -rf ~/.gemini/skills/planning-with-files
+rm -rf ~/.gemini/skills/aws
 rm ~/.gemini/tools/gsr.sh
 ```
 
@@ -209,6 +213,7 @@ rm -rf ~/.cursor/skills/jira
 rm -rf ~/.cursor/skills/confluence
 rm -rf ~/.cursor/skills/github
 rm -rf ~/.cursor/skills/planning-with-files
+rm -rf ~/.cursor/skills/aws
 ```
 
 ### Pi
@@ -218,6 +223,7 @@ rm -rf ~/.pi/agent/skills/jira
 rm -rf ~/.pi/agent/skills/confluence
 rm -rf ~/.pi/agent/skills/github
 rm -rf ~/.pi/agent/skills/planning-with-files
+rm -rf ~/.pi/agent/skills/aws
 ```
 
 ## Getting Help
