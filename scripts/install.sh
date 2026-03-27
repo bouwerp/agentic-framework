@@ -199,6 +199,8 @@ install_pi() {
     # Copy universal skills as Pi skill packages
     if [ -d "$PROJECT_ROOT/.opencode/skills" ]; then
         cp -r "$PROJECT_ROOT/.opencode/skills/"* "$PI_DIR/skills/" 2>/dev/null || true
+        # Remove README if it exists to avoid skill parser conflicts
+        rm -f "$PI_DIR/skills/README.md"
     fi
     # Copy platform-specific guide if available
     if [ -d "$PROJECT_ROOT/platforms/pi" ]; then
