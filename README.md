@@ -4,7 +4,7 @@ A collection of universal skills and tools for AI coding assistants (OpenCode, C
 
 ## What's Included
 
-### Skills (8)
+### Skills (9)
 Universal skills that work across all platforms:
 
 - **`figma-interaction/`** - Figma integration via MCP or REST API
@@ -59,6 +59,13 @@ Universal skills that work across all platforms:
   - OWASP-aligned security checklist
   - Test quality assessment
 
+- **`test-driven-development/`** - TDD workflow and testing patterns
+  - Red-green-refactor cycle with framework detection
+  - Test commands for Jest, Vitest, pytest, Go, Cargo, JUnit, RSpec, PHPUnit
+  - Edge case strategies, parameterized tests, mocking guidance
+  - Bug-to-regression-test workflow
+  - Test quality: assertion verification, mutation testing, the 40/60 rule
+
 ### Tools (3)
 Custom TypeScript tools for OpenCode:
 
@@ -101,7 +108,7 @@ Best for: Custom workflows, full control
 ```
 
 Installs:
-- All 8 skills
+- All 9 skills
 - All 3 TypeScript tools
 - Auto-approve permissions config
 
@@ -216,7 +223,7 @@ pi -p "Resolve all review threads on PR #42 and post a summary"
 
 | Feature | OpenCode | Claude Code | Gemini | Cursor | Pi |
 |---------|----------|-------------|---------|--------|-----|
-| **Skills** | ✅ All 8 | ✅ All 8 | ✅ All 8 | ✅ All 8 | ✅ All 8 |
+| **Skills** | ✅ All 9 | ✅ All 9 | ✅ All 9 | ✅ All 9 | ✅ All 9 |
 | **Tools** | ✅ TypeScript | ❌ MCP only | ❌ Shell scripts | ❌ MCP only | ❌ CLI tools |
 | **MCP** | ✅ Full | ✅ Full (best) | ⚠️ Limited | ✅ Full | ❌ None |
 | **Figma** | REST + OAuth | Official MCP | REST API | MCP plugin | REST API |
@@ -248,7 +255,8 @@ agentic-framework/
 │       ├── planning-with-files/
 │       ├── aws/
 │       ├── context-compactor/
-│       └── code-review/
+│       ├── code-review/
+│       └── test-driven-development/
 ├── README.md               # This file
 ├── INSTALL.md              # Detailed installation guide
 ├── PLATFORMS.md            # Platform comparison
