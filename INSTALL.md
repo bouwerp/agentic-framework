@@ -18,7 +18,7 @@ cd agentic-framework
 
 The installer detects your platform and installs the appropriate components:
 
-### Skills (7) — All Platforms
+### Skills (8) — All Platforms
 - `figma-interaction/` - Figma integration via MCP or REST API
 - `jira/` - JIRA interaction with ADF support
 - `confluence/` - Confluence interaction with ADF support
@@ -26,6 +26,7 @@ The installer detects your platform and installs the appropriate components:
 - `planning-with-files/` - Persistent file-based planning methodology
 - `aws/` - AWS CLI interaction with safety-first patterns
 - `context-compactor/` - Context window management and compaction
+- `code-review/` - Post-implementation review and simplification
 
 ### Tools (3) — OpenCode Only
 - `gsr.ts` - Global Search & Replace
@@ -39,7 +40,7 @@ The installer detects your platform and installs the appropriate components:
 
 | Component | OpenCode | Claude Code | Gemini | Cursor | Pi |
 |-----------|----------|-------------|--------|--------|-----|
-| **Skills** | All 7 | All 7 | All 7 | All 7 | All 7 |
+| **Skills** | All 8 | All 8 | All 8 | All 8 | All 8 |
 | **TypeScript tools** | All 3 | — | — | — | — |
 | **Shell tools** | — | — | gsr.sh | — | — |
 | **MCP setup** | — | Instructions | — | Instructions | — |
@@ -185,6 +186,7 @@ rm -rf ~/.config/opencode/skills/github
 rm -rf ~/.config/opencode/skills/planning-with-files
 rm -rf ~/.config/opencode/skills/aws
 rm -rf ~/.config/opencode/skills/context-compactor
+rm -rf ~/.config/opencode/skills/code-review
 ```
 
 ### Claude Code
@@ -196,6 +198,7 @@ rm -rf ~/.claude/skills/github
 rm -rf ~/.claude/skills/planning-with-files
 rm -rf ~/.claude/skills/aws
 rm -rf ~/.claude/skills/context-compactor
+rm -rf ~/.claude/skills/code-review
 ```
 
 ### Gemini
@@ -207,6 +210,7 @@ rm -rf ~/.gemini/skills/github
 rm -rf ~/.gemini/skills/planning-with-files
 rm -rf ~/.gemini/skills/aws
 rm -rf ~/.gemini/skills/context-compactor
+rm -rf ~/.gemini/skills/code-review
 rm ~/.gemini/tools/gsr.sh
 ```
 
@@ -219,6 +223,7 @@ rm -rf ~/.cursor/skills/github
 rm -rf ~/.cursor/skills/planning-with-files
 rm -rf ~/.cursor/skills/aws
 rm -rf ~/.cursor/skills/context-compactor
+rm -rf ~/.cursor/skills/code-review
 ```
 
 ### Pi
@@ -230,6 +235,7 @@ rm -rf ~/.pi/agent/skills/github
 rm -rf ~/.pi/agent/skills/planning-with-files
 rm -rf ~/.pi/agent/skills/aws
 rm -rf ~/.pi/agent/skills/context-compactor
+rm -rf ~/.pi/agent/skills/code-review
 ```
 
 ## Getting Help
