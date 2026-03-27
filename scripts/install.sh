@@ -302,35 +302,55 @@ show_next_steps() {
     echo ""
 }
 
+# Check if Pi is also installed and install skills for it
+install_pi_if_available() {
+    if command -v pi >/dev/null 2>&1 || [ -d "$HOME/.pi" ]; then
+        echo -e "${BLUE}─────────────────────────────────────────────────────────${NC}"
+        echo -e "${BLUE}Pi detected — installing skills for Pi as well${NC}"
+        echo -e "${BLUE}─────────────────────────────────────────────────────────${NC}"
+        echo ""
+        install_pi
+    fi
+}
+
 # Main installation flow
 case $PLATFORM in
     opencode)
         install_opencode
+        install_pi_if_available
         ;;
     claude-code)
         install_claude_code
+        install_pi_if_available
         ;;
     gemini)
         install_gemini
+        install_pi_if_available
         ;;
     cursor)
         install_cursor
+        install_pi_if_available
         ;;
     pi)
         install_pi
         ;;
     *)
-        echo -e "${RED}✗${NC} Could not detect supported platform"
-        echo ""
-        echo "Supported platforms:"
-        echo "  - OpenCode (opencode)"
-        echo "  - Claude Code (claude)"
-        echo "  - Gemini (gemini)"
-        echo "  - Cursor (cursor)"
-        echo "  - Pi (pi) — https://shittycodingagent.ai"
-        echo ""
-        echo "Please install one of these platforms first."
-        exit 1
+        # If no primary platform, try Pi if available
+        if command -v pi >/dev/null 2>&1 || [ -d "$HOME/.pi" ]; then
+            install_pi
+        else
+            echo -e "${RED}✗${NC} Could not detect supported platform"
+            echo ""
+            echo "Supported platforms:"
+            echo "  - OpenCode (opencode)"
+            echo "  - Claude Code (claude)"
+            echo "  - Gemini (gemini)"
+            echo "  - Cursor (cursor)"
+            echo "  - Pi (pi) — https://shittycodingagent.ai"
+            echo ""
+            echo "Please install one of these platforms first."
+            exit 1
+        fi
         ;;
 esac
 
