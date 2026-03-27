@@ -1,5 +1,5 @@
 ---
-name: aws-interaction
+name: aws
 description: This skill should be used when the user asks to interact with AWS services via the CLI — listing resources, checking logs, deploying infrastructure, managing S3, EC2, Lambda, ECS, CloudFormation, IAM, CloudWatch, RDS, DynamoDB, SQS, SNS, Secrets Manager, SSM, ECR, Route53, API Gateway, Step Functions, or Cost Explorer. Provides safe AWS CLI patterns with a read-first, confirm-before-mutating approach.
 version: 1.0.0
 ---

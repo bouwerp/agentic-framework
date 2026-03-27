@@ -1,5 +1,5 @@
 ---
-name: confluence-interaction
+name: confluence
 description: This skill should be used when the user asks to "view Confluence page", "update Confluence", "create Confluence page", "search Confluence", "summarize documentation", or works with Confluence REST API and Atlassian Document Format (ADF). Provides guidance on Confluence REST API interactions using ADF format.
 version: 1.0.0
 ---

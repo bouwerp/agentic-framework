@@ -1,5 +1,5 @@
 ---
-name: github-interaction
+name: github
 description: This skill should be used when the user asks to "create a PR", "check PR status", "get review comments", "resolve PR threads", "check CI/CD", "fix PR feedback", or any GitHub workflow involving pull requests, reviews, and checks. Provides guidance on GitHub CLI (gh) usage for PR lifecycle management.
 version: 1.0.0
 ---

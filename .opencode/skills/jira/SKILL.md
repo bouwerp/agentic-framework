@@ -1,5 +1,5 @@
 ---
-name: jira-interaction
+name: jira
 description: This skill should be used when the user asks to "update JIRA issue", "view JIRA ticket", "add JIRA comment", "modify JIRA description", or works with JIRA API and Atlassian Document Format (ADF). Provides guidance on JIRA REST API interactions using ADF format.
 version: 1.0.0
 ---
