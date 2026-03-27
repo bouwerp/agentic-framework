@@ -51,7 +51,7 @@ verify_opencode() {
     # Check skills
     echo ""
     echo "Checking skills..."
-    for skill in figma-interaction jira confluence github planning-with-files aws; do
+    for skill in figma-interaction jira confluence github planning-with-files aws context-compactor; do
         if [ -d "$OPENCODE_DIR/skills/$skill" ]; then
             echo -e "${GREEN}  ✓${NC} $skill/"
         else
@@ -77,7 +77,7 @@ verify_claude_code() {
 
     # Check skills
     echo "Checking skills..."
-    for skill in figma-interaction jira confluence github planning-with-files aws; do
+    for skill in figma-interaction jira confluence github planning-with-files aws context-compactor; do
         if [ -d "$CLAUDE_DIR/skills/$skill" ]; then
             echo -e "${GREEN}  ✓${NC} $skill/"
         else
@@ -118,7 +118,7 @@ verify_gemini() {
 
     # Check skills
     echo "Checking skills..."
-    for skill in figma-interaction jira confluence github planning-with-files aws; do
+    for skill in figma-interaction jira confluence github planning-with-files aws context-compactor; do
         if [ -d "$GEMINI_DIR/skills/$skill" ]; then
             echo -e "${GREEN}  ✓${NC} $skill/"
         else
@@ -144,7 +144,7 @@ verify_cursor() {
 
     # Check skills
     echo "Checking skills..."
-    for skill in figma-interaction jira confluence github planning-with-files aws; do
+    for skill in figma-interaction jira confluence github planning-with-files aws context-compactor; do
         if [ -d "$CURSOR_DIR/skills/$skill" ]; then
             echo -e "${GREEN}  ✓${NC} $skill/"
         else
@@ -161,7 +161,7 @@ verify_pi() {
 
     # Check skills
     echo "Checking skills..."
-    for skill in figma-interaction jira confluence github planning-with-files aws; do
+    for skill in figma-interaction jira confluence github planning-with-files aws context-compactor; do
         if [ -d "$PI_DIR/skills/$skill" ]; then
             echo -e "${GREEN}  ✓${NC} $skill/"
         else
