@@ -1,6 +1,6 @@
 # Multi-Platform Support
 
-The Orchestrator-Worker-Validator framework supports 4 major AI coding platforms.
+Universal skills and tools for 5 major AI coding platforms.
 
 ## Supported Platforms
 
@@ -10,6 +10,7 @@ The Orchestrator-Worker-Validator framework supports 4 major AI coding platforms
 | **Claude Code** | ✅ Full | ✅ Full | Recommended |
 | **Gemini** | ✅ Full | ✅ Full | REST API |
 | **Cursor** | ✅ Full | ✅ Full | Plugin-based |
+| **Pi** | ✅ Full | ✅ Full | Skills-based |
 
 ## Quick Install
 
@@ -28,7 +29,7 @@ OPENCODE_CONFIG=~/.config/opencode ./scripts/install.sh
 # Claude Code
 claude plugin install figma@claude-plugins-official
 
-# Gemini  
+# Gemini
 export GEMINI_CONFIG=~/.gemini && ./scripts/install.sh
 
 # Cursor
@@ -47,14 +48,13 @@ export CURSOR_CONFIG=~/.cursor && ./scripts/install.sh
 ```
 
 **Installs**:
-- Agents: `orchestrator.md`, `worker.md`, `validator.md`
 - Tools: `gsr.ts`, `figma-rest.ts`, `figma-oauth.ts`
-- Skills: `figma-interaction/`, `jira/`, `confluence/`
+- Skills: `figma-interaction/`, `jira/`, `confluence/`, `github/`
 - Config: `opencode.json`
 
 **Test**:
 ```bash
-opencode run "Hello, I'm the Orchestrator"
+opencode run "Get design tokens from Figma file ABC123"
 ```
 
 ---
@@ -65,7 +65,10 @@ opencode run "Hello, I'm the Orchestrator"
 
 **Installation**:
 ```bash
-# Install official plugins
+# Run installer for skills
+./scripts/install.sh
+
+# Install official plugins (optional)
 claude plugin install figma@claude-plugins-official
 claude plugin install jira@claude-plugins-official
 claude plugin install confluence@claude-plugins-official
@@ -76,13 +79,12 @@ claude mcp auth figma
 ```
 
 **Installs**:
-- Skills: O-W-V role definitions
-- MCP: Figma, JIRA, Confluence servers
-- Plugins: Official integrations
+- Skills: `figma-interaction/`, `jira/`, `confluence/`, `github/`
+- MCP: Figma, JIRA, Confluence servers (optional)
 
 **Test**:
 ```bash
-claude "Hello, I'm the Orchestrator"
+claude "Extract colors and spacing from this Figma design: <url>"
 ```
 
 ---
@@ -97,15 +99,14 @@ claude "Hello, I'm the Orchestrator"
 ```
 
 **Installs**:
-- Skills: System instructions for roles
-- Tools: Shell scripts (gsr.sh)
-- Env: REST API setup
+- Skills: `figma-interaction/`, `jira/`, `confluence/`, `github/`
+- Tools: Shell scripts (`gsr.sh`)
 
 **Note**: Gemini has limited MCP support, uses REST API approach.
 
 **Test**:
 ```bash
-gemini --system="You are the Orchestrator" "Hello"
+gemini "Get design tokens from Figma file ABC123"
 ```
 
 ---
@@ -124,13 +125,40 @@ gemini --system="You are the Orchestrator" "Hello"
 ```
 
 **Installs**:
-- Skills: Universal skills
+- Skills: `figma-interaction/`, `jira/`, `confluence/`, `github/`
 - MCP: Manual configuration via GUI
 
 **Test**:
 ```
 Open Cursor agent chat
-Type: "Hello, I'm the Orchestrator"
+Type: "Get design tokens from Figma file ABC123"
+```
+
+---
+
+### Pi
+
+**Best for**: Minimal, extensible terminal agent
+
+**Website**: https://shittycodingagent.ai
+
+**Installation**:
+```bash
+# Install Pi first
+npm install -g @mariozechner/pi-coding-agent
+
+# Run installer for skills
+./scripts/install.sh
+```
+
+**Installs**:
+- Skills: `figma-interaction/`, `jira/`, `confluence/`, `github/`
+
+**Note**: Pi deliberately omits MCP support. Skills are capability packages with instructions and CLI tool definitions. Pi emphasizes "primitives, not features" — extensions and skills are the primary extensibility mechanism.
+
+**Test**:
+```bash
+pi -p "Get design tokens from Figma file ABC123"
 ```
 
 ---
@@ -167,16 +195,17 @@ Get tokens:
 
 ## Platform Comparison
 
-| Feature | OpenCode | Claude Code | Gemini | Cursor |
-|---------|----------|-------------|---------|--------|
-| **Agent Config** | Markdown | Skills | System instructions | Skills |
-| **Tool System** | TypeScript | MCP plugins | Shell scripts | MCP |
-| **MCP Support** | Full | Full (best) | Limited | Full |
-| **Figma** | REST + OAuth | Official MCP | REST API | MCP plugin |
-| **JIRA** | REST + ADF | MCP plugin | REST API | MCP plugin |
-| **Confluence** | REST + ADF | MCP plugin | REST API | MCP plugin |
-| **Models** | Any (OpenRouter) | Claude only | Gemini only | Any |
-| **Best For** | Custom | Figma-heavy | Free tier | IDE users |
+| Feature | OpenCode | Claude Code | Gemini | Cursor | Pi |
+|---------|----------|-------------|---------|--------|-----|
+| **Skills** | All 4 | All 4 | All 4 | All 4 | All 4 |
+| **Tool System** | TypeScript | MCP plugins | Shell scripts | MCP | CLI tools |
+| **MCP Support** | Full | Full (best) | Limited | Full | None |
+| **Figma** | REST + OAuth | Official MCP | REST API | MCP plugin | REST API |
+| **JIRA** | REST + ADF | MCP plugin | REST API | MCP plugin | REST API |
+| **Confluence** | REST + ADF | MCP plugin | REST API | MCP plugin | REST API |
+| **GitHub** | `gh` CLI | `gh` CLI | `gh` CLI | `gh` CLI | `gh` CLI |
+| **Models** | Any (OpenRouter) | Claude only | Gemini only | Any | Any (15+ providers) |
+| **Best For** | Custom | Figma-heavy | Free tier | IDE users | Minimal/extensible |
 
 ## Troubleshooting
 
@@ -205,6 +234,7 @@ export OPENCODE_CONFIG=~/.config/opencode
 export CLAUDE_CONFIG=~/.claude
 export GEMINI_CONFIG=~/.gemini
 export CURSOR_CONFIG=~/.cursor
+export PI_CONFIG=~/.pi
 
 ./scripts/install.sh
 ```

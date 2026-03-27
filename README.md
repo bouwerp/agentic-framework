@@ -1,10 +1,10 @@
 # AI Assistant Skills & Tools
 
-A collection of universal skills and tools for AI coding assistants (OpenCode, Claude Code, Gemini, Cursor).
+A collection of universal skills and tools for AI coding assistants (OpenCode, Claude Code, Gemini, Cursor, Pi).
 
 ## What's Included
 
-### Skills (3)
+### Skills (4)
 Universal skills that work across all platforms:
 
 - **`figma-interaction/`** - Figma integration via MCP or REST API
@@ -23,6 +23,13 @@ Universal skills that work across all platforms:
   - Search documentation
   - Summarize content
   - OAuth and PAT authentication
+
+- **`github/`** - GitHub PR workflow via `gh` CLI
+  - Create and update pull requests
+  - Get review comments and unresolved threads
+  - Resolve review threads (single and batch)
+  - Check CI/CD status and read check logs
+  - Full review cycle management
 
 ### Tools (3)
 Custom TypeScript tools for OpenCode:
@@ -66,7 +73,7 @@ Best for: Custom workflows, full control
 ```
 
 Installs:
-- All 3 skills
+- All 4 skills
 - All 3 TypeScript tools
 - Auto-approve permissions config
 
@@ -107,6 +114,17 @@ Best for: IDE integration, VS Code users
 /plugin-add jira
 ```
 
+#### Pi
+
+Best for: Minimal, extensible terminal agent
+
+```bash
+# Install Pi first: npm install -g @mariozechner/pi-coding-agent
+./scripts/install.sh
+```
+
+Note: Pi uses skills as capability packages, no MCP support. See https://shittycodingagent.ai
+
 ## Environment Setup
 
 Add to your `~/.zshrc` or `~/.bashrc`:
@@ -136,6 +154,9 @@ claude "Extract colors and spacing from this Figma design: <url>"
 
 # Gemini
 gemini --system="You are a designer" "Get variables from Figma file ABC123"
+
+# Pi
+pi -p "Get design tokens from this Figma: https://www.figma.com/file/ABC123"
 ```
 
 ### GSR Tool (OpenCode only)
@@ -155,16 +176,25 @@ opencode run "Get details for JIRA issue PROJ-123"
 claude "Update JIRA ticket PROJ-456 with status 'In Progress'"
 ```
 
+### GitHub Skills
+
+```bash
+opencode run "Get unresolved review comments on PR #42"
+claude "Check CI status and fix failing tests on PR #42"
+pi -p "Resolve all review threads on PR #42 and post a summary"
+```
+
 ## Platform Comparison
 
-| Feature | OpenCode | Claude Code | Gemini | Cursor |
-|---------|----------|-------------|---------|--------|
-| **Skills** | ✅ Full | ✅ Full | ✅ Full | ✅ Full |
-| **Tools** | ✅ TypeScript | ❌ MCP only | ❌ Shell scripts | ❌ MCP only |
-| **MCP** | ✅ Full | ✅ Full (best) | ⚠️ Limited | ✅ Full |
-| **Figma** | REST + OAuth | Official MCP | REST API | MCP plugin |
-| **JIRA** | REST + ADF | MCP plugin | REST API | MCP plugin |
-| **Confluence** | REST + ADF | MCP plugin | REST API | MCP plugin |
+| Feature | OpenCode | Claude Code | Gemini | Cursor | Pi |
+|---------|----------|-------------|---------|--------|-----|
+| **Skills** | ✅ All 4 | ✅ All 4 | ✅ All 4 | ✅ All 4 | ✅ All 4 |
+| **Tools** | ✅ TypeScript | ❌ MCP only | ❌ Shell scripts | ❌ MCP only | ❌ CLI tools |
+| **MCP** | ✅ Full | ✅ Full (best) | ⚠️ Limited | ✅ Full | ❌ None |
+| **Figma** | REST + OAuth | Official MCP | REST API | MCP plugin | REST API |
+| **JIRA** | REST + ADF | MCP plugin | REST API | MCP plugin | REST API |
+| **Confluence** | REST + ADF | MCP plugin | REST API | MCP plugin | REST API |
+| **GitHub** | `gh` CLI | `gh` CLI | `gh` CLI | `gh` CLI | `gh` CLI |
 
 ## Repository Structure
 
@@ -175,7 +205,8 @@ agentic-framework/
 │   └── verify.sh           # Installation verifier
 ├── platforms/
 │   ├── claude-code/        # Claude-specific guide
-│   └── gemini/             # Gemini-specific guide
+│   ├── gemini/             # Gemini-specific guide
+│   └── pi/                 # Pi-specific guide
 ├── .opencode/
 │   ├── tools/              # TypeScript tools (OpenCode only)
 │   │   ├── gsr.ts
@@ -184,7 +215,8 @@ agentic-framework/
 │   └── skills/             # Universal skills
 │       ├── figma-interaction/
 │       ├── jira/
-│       └── confluence/
+│       ├── confluence/
+│       └── github/
 ├── README.md               # This file
 ├── INSTALL.md              # Detailed installation guide
 ├── PLATFORMS.md            # Platform comparison
@@ -197,6 +229,7 @@ agentic-framework/
 - **[PLATFORMS.md](PLATFORMS.md)** - Platform-specific details
 - **`platforms/claude-code/README.md`** - Claude Code setup
 - **`platforms/gemini/README.md`** - Gemini setup
+- **`platforms/pi/README.md`** - Pi setup
 
 ## License
 

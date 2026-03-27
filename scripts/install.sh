@@ -1,7 +1,7 @@
 #!/bin/bash
 
-# Orchestrator-Worker-Validator Framework Installer
-# Supports: OpenCode, Claude Code, Gemini, Cursor
+# AI Assistant Skills & Tools Installer
+# Supports: OpenCode, Claude Code, Gemini, Cursor, Pi
 
 set -e
 
@@ -15,7 +15,7 @@ BLUE='\033[0;34m'
 NC='\033[0m'
 
 echo -e "${BLUE}╔════════════════════════════════════════════════════════╗${NC}"
-echo -e "${BLUE}║  Orchestrator-Worker-Validator Framework Installer    ║${NC}"
+echo -e "${BLUE}║  AI Assistant Skills & Tools Installer                ║${NC}"
 echo -e "${BLUE}╚════════════════════════════════════════════════════════╝${NC}"
 echo ""
 
@@ -29,6 +29,8 @@ detect_platform() {
         echo "gemini"
     elif command -v cursor >/dev/null 2>&1 || [ -d "$HOME/.cursor" ]; then
         echo "cursor"
+    elif command -v pi >/dev/null 2>&1 || [ -d "$HOME/.pi" ]; then
+        echo "pi"
     else
         echo "unknown"
     fi
@@ -42,49 +44,45 @@ echo ""
 # Platform-specific installation
 install_opencode() {
     OPENCODE_DIR="${OPENCODE_CONFIG:-$HOME/.config/opencode}"
-    
+
     echo -e "${GREEN}✓${NC} Installing for OpenCode: ${OPENCODE_DIR}"
     echo ""
-    
-    echo -e "${YELLOW}Step 1/4: Creating directories...${NC}"
-    mkdir -p "$OPENCODE_DIR/agents"
+
+    echo -e "${YELLOW}Step 1/3: Creating directories...${NC}"
     mkdir -p "$OPENCODE_DIR/tools"
     mkdir -p "$OPENCODE_DIR/skills"
     echo -e "${GREEN}✓${NC} Directories created"
     echo ""
-    
-    echo -e "${YELLOW}Step 2/4: Installing agents...${NC}"
-    cp "$PROJECT_ROOT/.opencode/agents/"*.md "$OPENCODE_DIR/agents/"
-    echo -e "${GREEN}✓${NC} Agents installed (orchestrator, worker, validator)"
-    echo ""
-    
-    echo -e "${YELLOW}Step 3/4: Installing tools...${NC}"
-    cp "$PROJECT_ROOT/.opencode/tools/"*.ts "$OPENCODE_DIR/tools/"
-    echo -e "${GREEN}✓${NC} Tools installed (gsr, figma-rest, figma-oauth)"
-    echo ""
-    
-    echo -e "${YELLOW}Step 4/4: Installing skills...${NC}"
-    if [ -d "$PROJECT_ROOT/.opencode/skills" ]; then
-        cp -r "$PROJECT_ROOT/.opencode/skills/"* "$OPENCODE_DIR/skills/" 2>/dev/null || true
-        echo -e "${GREEN}✓${NC} Skills installed (figma-interaction, jira, confluence)"
+
+    echo -e "${YELLOW}Step 2/3: Installing tools...${NC}"
+    if [ -d "$PROJECT_ROOT/.opencode/tools" ]; then
+        cp "$PROJECT_ROOT/.opencode/tools/"*.ts "$OPENCODE_DIR/tools/"
+        echo -e "${GREEN}✓${NC} Tools installed (gsr, figma-rest, figma-oauth)"
     fi
     echo ""
-    
+
+    echo -e "${YELLOW}Step 3/3: Installing skills...${NC}"
+    if [ -d "$PROJECT_ROOT/.opencode/skills" ]; then
+        cp -r "$PROJECT_ROOT/.opencode/skills/"* "$OPENCODE_DIR/skills/" 2>/dev/null || true
+        echo -e "${GREEN}✓${NC} Skills installed (figma-interaction, jira, confluence, github)"
+    fi
+    echo ""
+
     install_config "$OPENCODE_DIR/opencode.json"
 }
 
 install_claude_code() {
     CLAUDE_DIR="$HOME/.claude"
-    
+
     echo -e "${GREEN}✓${NC} Installing for Claude Code: ${CLAUDE_DIR}"
     echo ""
-    
-    echo -e "${YELLOW}Step 1/3: Creating directories...${NC}"
+
+    echo -e "${YELLOW}Step 1/2: Creating directories...${NC}"
     mkdir -p "$CLAUDE_DIR/skills"
     echo -e "${GREEN}✓${NC} Directories created"
     echo ""
-    
-    echo -e "${YELLOW}Step 2/3: Installing skills...${NC}"
+
+    echo -e "${YELLOW}Step 2/2: Installing skills...${NC}"
     # Copy platform-specific skills for Claude
     if [ -d "$PROJECT_ROOT/platforms/claude-code" ]; then
         cp "$PROJECT_ROOT/platforms/claude-code/"*.md "$CLAUDE_DIR/skills/" 2>/dev/null || true
@@ -93,16 +91,15 @@ install_claude_code() {
     if [ -d "$PROJECT_ROOT/.opencode/skills" ]; then
         cp -r "$PROJECT_ROOT/.opencode/skills/"* "$CLAUDE_DIR/skills/" 2>/dev/null || true
     fi
-    echo -e "${GREEN}✓${NC} Skills installed"
+    echo -e "${GREEN}✓${NC} Skills installed (figma-interaction, jira, confluence, github)"
     echo ""
-    
-    echo -e "${YELLOW}Step 3/3: Setting up MCP servers...${NC}"
+
+    echo -e "${YELLOW}MCP Setup (optional):${NC}"
     echo "To add Figma MCP server, run:"
     echo "  claude mcp add --transport http figma https://mcp.figma.com/mcp"
     echo "  claude mcp auth figma"
     echo ""
-    
-    echo "Claude Code uses plugins for additional functionality:"
+    echo "Or install official plugins:"
     echo "  claude plugin install figma@claude-plugins-official"
     echo "  claude plugin install jira@claude-plugins-official"
     echo "  claude plugin install confluence@claude-plugins-official"
@@ -111,25 +108,31 @@ install_claude_code() {
 
 install_gemini() {
     GEMINI_DIR="$HOME/.gemini"
-    
+
     echo -e "${GREEN}✓${NC} Installing for Gemini: ${GEMINI_DIR}"
     echo ""
-    
+
     echo -e "${YELLOW}Step 1/3: Creating directories...${NC}"
     mkdir -p "$GEMINI_DIR/skills"
     mkdir -p "$GEMINI_DIR/tools"
     echo -e "${GREEN}✓${NC} Directories created"
     echo ""
-    
-    echo -e "${YELLOW}Step 2/3: Installing skills and tools...${NC}"
+
+    echo -e "${YELLOW}Step 2/3: Installing skills...${NC}"
     # Copy platform-specific skills for Gemini
     if [ -d "$PROJECT_ROOT/platforms/gemini" ]; then
         cp "$PROJECT_ROOT/platforms/gemini/"*.md "$GEMINI_DIR/skills/" 2>/dev/null || true
     fi
-    # Copy REST API tools (Gemini doesn't support TypeScript tools)
-    if [ -d "$PROJECT_ROOT/.opencode/tools" ]; then
-        # Create shell script versions for Gemini
-        cat > "$GEMINI_DIR/tools/gsr.sh" << 'GSREOF'
+    # Copy universal skills
+    if [ -d "$PROJECT_ROOT/.opencode/skills" ]; then
+        cp -r "$PROJECT_ROOT/.opencode/skills/"* "$GEMINI_DIR/skills/" 2>/dev/null || true
+    fi
+    echo -e "${GREEN}✓${NC} Skills installed (figma-interaction, jira, confluence, github)"
+    echo ""
+
+    echo -e "${YELLOW}Step 3/3: Installing tools...${NC}"
+    # Create shell script versions for Gemini (no TypeScript tool support)
+    cat > "$GEMINI_DIR/tools/gsr.sh" << 'GSREOF'
 #!/bin/bash
 # Global Search & Replace for Gemini
 SEARCH="$1"
@@ -146,39 +149,32 @@ if [[ $REPLY =~ ^[Yy]$ ]]; then
   echo "Changes applied!"
 fi
 GSREOF
-        chmod +x "$GEMINI_DIR/tools/gsr.sh"
-        echo -e "${GREEN}✓${NC} Tools installed (gsr.sh)"
-    fi
-    echo ""
-    
-    echo -e "${YELLOW}Step 3/3: Environment setup...${NC}"
-    echo "Add to ~/.zshrc or ~/.bashrc:"
-    echo "  export FIGMA_PERSONAL_TOKEN='figd_your-token'"
-    echo "  export ATLASSIAN_API_TOKEN='your-token'"
+    chmod +x "$GEMINI_DIR/tools/gsr.sh"
+    echo -e "${GREEN}✓${NC} Tools installed (gsr.sh)"
     echo ""
 }
 
 install_cursor() {
     CURSOR_DIR="$HOME/.cursor"
-    
+
     echo -e "${GREEN}✓${NC} Installing for Cursor: ${CURSOR_DIR}"
     echo ""
-    
-    echo -e "${YELLOW}Step 1/3: Creating directories...${NC}"
+
+    echo -e "${YELLOW}Step 1/2: Creating directories...${NC}"
     mkdir -p "$CURSOR_DIR/skills"
     echo -e "${GREEN}✓${NC} Directories created"
     echo ""
-    
-    echo -e "${YELLOW}Step 2/3: Installing skills...${NC}"
+
+    echo -e "${YELLOW}Step 2/2: Installing skills...${NC}"
     # Copy universal skills
     if [ -d "$PROJECT_ROOT/.opencode/skills" ]; then
         cp -r "$PROJECT_ROOT/.opencode/skills/"* "$CURSOR_DIR/skills/" 2>/dev/null || true
     fi
-    echo -e "${GREEN}✓${NC} Skills installed"
+    echo -e "${GREEN}✓${NC} Skills installed (figma-interaction, jira, confluence, github)"
     echo ""
-    
-    echo -e "${YELLOW}Step 3/3: Cursor-specific setup...${NC}"
-    echo "In Cursor, you can also install plugins via chat:"
+
+    echo -e "${YELLOW}MCP Setup (optional):${NC}"
+    echo "In Cursor, install plugins via chat:"
     echo "  /plugin-add figma"
     echo "  /plugin-add jira"
     echo ""
@@ -188,11 +184,40 @@ install_cursor() {
     echo ""
 }
 
+install_pi() {
+    PI_DIR="$HOME/.pi/agent"
+
+    echo -e "${GREEN}✓${NC} Installing for Pi: ${PI_DIR}"
+    echo ""
+
+    echo -e "${YELLOW}Step 1/2: Creating directories...${NC}"
+    mkdir -p "$PI_DIR/skills"
+    echo -e "${GREEN}✓${NC} Directories created"
+    echo ""
+
+    echo -e "${YELLOW}Step 2/2: Installing skills...${NC}"
+    # Copy universal skills as Pi skill packages
+    if [ -d "$PROJECT_ROOT/.opencode/skills" ]; then
+        cp -r "$PROJECT_ROOT/.opencode/skills/"* "$PI_DIR/skills/" 2>/dev/null || true
+    fi
+    # Copy platform-specific guide if available
+    if [ -d "$PROJECT_ROOT/platforms/pi" ]; then
+        cp "$PROJECT_ROOT/platforms/pi/"*.md "$PI_DIR/skills/" 2>/dev/null || true
+    fi
+    echo -e "${GREEN}✓${NC} Skills installed (figma-interaction, jira, confluence, github)"
+    echo ""
+
+    echo -e "${YELLOW}Note:${NC} Pi uses skills as capability packages with CLI tools."
+    echo "No MCP support — skills provide instructions and tool definitions."
+    echo "See: https://shittycodingagent.ai"
+    echo ""
+}
+
 install_config() {
     CONFIG_FILE="$1"
     
     echo -e "${YELLOW}Optional: Update configuration file?${NC}"
-    echo "This will add agent definitions and model configurations."
+    echo "This will add model and provider configurations."
     read -p "Update config? (y/n) " -n 1 -r
     echo ""
     if [[ $REPLY =~ ^[Yy]$ ]]; then
@@ -240,21 +265,23 @@ show_next_steps() {
             echo "Next steps:"
             echo "1. Set your API tokens (see above)"
             echo "2. Restart opencode or reload your shell"
-            echo "3. Test with: opencode run \"Hello, I'm the Orchestrator\""
+            echo "3. Test with: opencode run \"Get design tokens from Figma file ABC123\""
             echo "4. Verify: ./scripts/verify.sh"
             ;;
         claude-code)
             echo "Next steps:"
             echo "1. Set your API tokens (see above)"
-            echo "2. Install plugins:"
+            echo "2. Install plugins (optional):"
             echo "   claude plugin install figma@claude-plugins-official"
-            echo "3. Test with: claude \"Hello, I'm the Orchestrator\""
+            echo "3. Test with: claude \"Get design tokens from Figma file ABC123\""
+            echo "4. Verify: ./scripts/verify.sh"
             ;;
         gemini)
             echo "Next steps:"
             echo "1. Set your API tokens (see above)"
-            echo "2. Test with: gemini --system=\"You are the Orchestrator\" \"Hello\""
-            echo "3. Note: Use REST API approach for Figma/JIRA/Confluence"
+            echo "2. Reload your shell"
+            echo "3. Test with: gemini \"Get design tokens from Figma file ABC123\""
+            echo "4. Verify: ./scripts/verify.sh"
             ;;
         cursor)
             echo "Next steps:"
@@ -262,6 +289,14 @@ show_next_steps() {
             echo "2. Restart Cursor"
             echo "3. Install plugins via chat: /plugin-add figma"
             echo "4. Test in Cursor agent chat"
+            echo "5. Verify: ./scripts/verify.sh"
+            ;;
+        pi)
+            echo "Next steps:"
+            echo "1. Set your API tokens (see above)"
+            echo "2. Reload your shell"
+            echo "3. Test with: pi -p \"Get design tokens from Figma file ABC123\""
+            echo "4. Verify: ./scripts/verify.sh"
             ;;
     esac
     echo ""
@@ -281,6 +316,9 @@ case $PLATFORM in
     cursor)
         install_cursor
         ;;
+    pi)
+        install_pi
+        ;;
     *)
         echo -e "${RED}✗${NC} Could not detect supported platform"
         echo ""
@@ -289,6 +327,7 @@ case $PLATFORM in
         echo "  - Claude Code (claude)"
         echo "  - Gemini (gemini)"
         echo "  - Cursor (cursor)"
+        echo "  - Pi (pi) — https://shittycodingagent.ai"
         echo ""
         echo "Please install one of these platforms first."
         exit 1
