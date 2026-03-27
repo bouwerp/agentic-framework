@@ -18,11 +18,12 @@ cd agentic-framework
 
 The installer detects your platform and installs the appropriate components:
 
-### Skills (4) — All Platforms
+### Skills (5) — All Platforms
 - `figma-interaction/` - Figma integration via MCP or REST API
 - `jira/` - JIRA interaction with ADF support
 - `confluence/` - Confluence interaction with ADF support
 - `github/` - GitHub PR workflow via `gh` CLI
+- `planning-with-files/` - Persistent file-based planning methodology
 
 ### Tools (3) — OpenCode Only
 - `gsr.ts` - Global Search & Replace
@@ -36,7 +37,7 @@ The installer detects your platform and installs the appropriate components:
 
 | Component | OpenCode | Claude Code | Gemini | Cursor | Pi |
 |-----------|----------|-------------|--------|--------|-----|
-| **Skills** | All 4 | All 4 | All 4 | All 4 | All 4 |
+| **Skills** | All 5 | All 5 | All 5 | All 5 | All 5 |
 | **TypeScript tools** | All 3 | — | — | — | — |
 | **Shell tools** | — | — | gsr.sh | — | — |
 | **MCP setup** | — | Instructions | — | Instructions | — |
@@ -179,6 +180,7 @@ rm -rf ~/.config/opencode/skills/figma-interaction
 rm -rf ~/.config/opencode/skills/jira
 rm -rf ~/.config/opencode/skills/confluence
 rm -rf ~/.config/opencode/skills/github
+rm -rf ~/.config/opencode/skills/planning-with-files
 ```
 
 ### Claude Code
@@ -187,6 +189,7 @@ rm -rf ~/.claude/skills/figma-interaction
 rm -rf ~/.claude/skills/jira
 rm -rf ~/.claude/skills/confluence
 rm -rf ~/.claude/skills/github
+rm -rf ~/.claude/skills/planning-with-files
 ```
 
 ### Gemini
@@ -195,6 +198,7 @@ rm -rf ~/.gemini/skills/figma-interaction
 rm -rf ~/.gemini/skills/jira
 rm -rf ~/.gemini/skills/confluence
 rm -rf ~/.gemini/skills/github
+rm -rf ~/.gemini/skills/planning-with-files
 rm ~/.gemini/tools/gsr.sh
 ```
 
@@ -204,6 +208,7 @@ rm -rf ~/.cursor/skills/figma-interaction
 rm -rf ~/.cursor/skills/jira
 rm -rf ~/.cursor/skills/confluence
 rm -rf ~/.cursor/skills/github
+rm -rf ~/.cursor/skills/planning-with-files
 ```
 
 ### Pi
@@ -212,6 +217,7 @@ rm -rf ~/.pi/agent/skills/figma-interaction
 rm -rf ~/.pi/agent/skills/jira
 rm -rf ~/.pi/agent/skills/confluence
 rm -rf ~/.pi/agent/skills/github
+rm -rf ~/.pi/agent/skills/planning-with-files
 ```
 
 ## Getting Help

@@ -49,7 +49,7 @@ export CURSOR_CONFIG=~/.cursor && ./scripts/install.sh
 
 **Installs**:
 - Tools: `gsr.ts`, `figma-rest.ts`, `figma-oauth.ts`
-- Skills: `figma-interaction/`, `jira/`, `confluence/`, `github/`
+- Skills: `figma-interaction/`, `jira/`, `confluence/`, `github/`, `planning-with-files/`
 - Config: `opencode.json`
 
 **Test**:
@@ -79,7 +79,7 @@ claude mcp auth figma
 ```
 
 **Installs**:
-- Skills: `figma-interaction/`, `jira/`, `confluence/`, `github/`
+- Skills: `figma-interaction/`, `jira/`, `confluence/`, `github/`, `planning-with-files/`
 - MCP: Figma, JIRA, Confluence servers (optional)
 
 **Test**:
@@ -99,7 +99,7 @@ claude "Extract colors and spacing from this Figma design: <url>"
 ```
 
 **Installs**:
-- Skills: `figma-interaction/`, `jira/`, `confluence/`, `github/`
+- Skills: `figma-interaction/`, `jira/`, `confluence/`, `github/`, `planning-with-files/`
 - Tools: Shell scripts (`gsr.sh`)
 
 **Note**: Gemini has limited MCP support, uses REST API approach.
@@ -125,7 +125,7 @@ gemini "Get design tokens from Figma file ABC123"
 ```
 
 **Installs**:
-- Skills: `figma-interaction/`, `jira/`, `confluence/`, `github/`
+- Skills: `figma-interaction/`, `jira/`, `confluence/`, `github/`, `planning-with-files/`
 - MCP: Manual configuration via GUI
 
 **Test**:
@@ -152,7 +152,7 @@ npm install -g @mariozechner/pi-coding-agent
 ```
 
 **Installs**:
-- Skills: `figma-interaction/`, `jira/`, `confluence/`, `github/`
+- Skills: `figma-interaction/`, `jira/`, `confluence/`, `github/`, `planning-with-files/`
 
 **Note**: Pi deliberately omits MCP support. Skills are capability packages with instructions and CLI tool definitions. Pi emphasizes "primitives, not features" — extensions and skills are the primary extensibility mechanism.
 
@@ -197,7 +197,7 @@ Get tokens:
 
 | Feature | OpenCode | Claude Code | Gemini | Cursor | Pi |
 |---------|----------|-------------|---------|--------|-----|
-| **Skills** | All 4 | All 4 | All 4 | All 4 | All 4 |
+| **Skills** | All 5 | All 5 | All 5 | All 5 | All 5 |
 | **Tool System** | TypeScript | MCP plugins | Shell scripts | MCP | CLI tools |
 | **MCP Support** | Full | Full (best) | Limited | Full | None |
 | **Figma** | REST + OAuth | Official MCP | REST API | MCP plugin | REST API |

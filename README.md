@@ -4,7 +4,7 @@ A collection of universal skills and tools for AI coding assistants (OpenCode, C
 
 ## What's Included
 
-### Skills (4)
+### Skills (5)
 Universal skills that work across all platforms:
 
 - **`figma-interaction/`** - Figma integration via MCP or REST API
@@ -30,6 +30,13 @@ Universal skills that work across all platforms:
   - Resolve review threads (single and batch)
   - Check CI/CD status and read check logs
   - Full review cycle management
+
+- **`planning-with-files/`** - Persistent file-based planning methodology
+  - Three-file system: task_plan.md, findings.md, progress.md
+  - Structured phases with dependency tracking
+  - Session recovery from context resets
+  - Hierarchical plans for large tasks
+  - Git checkpoint integration
 
 ### Tools (3)
 Custom TypeScript tools for OpenCode:
@@ -73,7 +80,7 @@ Best for: Custom workflows, full control
 ```
 
 Installs:
-- All 4 skills
+- All 5 skills
 - All 3 TypeScript tools
 - Auto-approve permissions config
 
@@ -188,7 +195,7 @@ pi -p "Resolve all review threads on PR #42 and post a summary"
 
 | Feature | OpenCode | Claude Code | Gemini | Cursor | Pi |
 |---------|----------|-------------|---------|--------|-----|
-| **Skills** | ✅ All 4 | ✅ All 4 | ✅ All 4 | ✅ All 4 | ✅ All 4 |
+| **Skills** | ✅ All 5 | ✅ All 5 | ✅ All 5 | ✅ All 5 | ✅ All 5 |
 | **Tools** | ✅ TypeScript | ❌ MCP only | ❌ Shell scripts | ❌ MCP only | ❌ CLI tools |
 | **MCP** | ✅ Full | ✅ Full (best) | ⚠️ Limited | ✅ Full | ❌ None |
 | **Figma** | REST + OAuth | Official MCP | REST API | MCP plugin | REST API |
@@ -216,7 +223,8 @@ agentic-framework/
 │       ├── figma-interaction/
 │       ├── jira/
 │       ├── confluence/
-│       └── github/
+│       ├── github/
+│       └── planning-with-files/
 ├── README.md               # This file
 ├── INSTALL.md              # Detailed installation guide
 ├── PLATFORMS.md            # Platform comparison
