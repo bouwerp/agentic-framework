@@ -242,21 +242,20 @@ agentic-framework/
 │   ├── claude-code/        # Claude-specific guide
 │   ├── gemini/             # Gemini-specific guide
 │   └── pi/                 # Pi-specific guide
-├── .opencode/
-│   ├── tools/              # TypeScript tools (OpenCode only)
-│   │   ├── gsr.ts
-│   │   ├── figma-rest.ts
-│   │   └── figma-oauth.ts
-│   └── skills/             # Universal skills
-│       ├── figma-interaction/
-│       ├── jira/
-│       ├── confluence/
-│       ├── github/
-│       ├── planning-with-files/
-│       ├── aws/
-│       ├── context-compactor/
-│       ├── code-review/
-│       └── test-driven-development/
+├── tools/                  # TypeScript tools (OpenCode only)
+│   ├── gsr.ts
+│   ├── figma-rest.ts
+│   └── figma-oauth.ts
+├── skills/                 # Universal skills
+│   ├── figma-interaction/
+│   ├── jira/
+│   ├── confluence/
+│   ├── github/
+│   ├── planning-with-files/
+│   ├── aws/
+│   ├── context-compactor/
+│   ├── code-review/
+│   └── test-driven-development/
 ├── README.md               # This file
 ├── INSTALL.md              # Detailed installation guide
 ├── PLATFORMS.md            # Platform comparison

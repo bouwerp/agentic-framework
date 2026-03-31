@@ -6,8 +6,8 @@ Adaptation of the O-W-V framework for Anthropic's Claude Code.
 
 | Aspect | OpenCode | Claude Code |
 |--------|----------|-------------|
-| **Agent Config** | Markdown files in `.opencode/agents/` | Claude Skills + MCP |
-| **Tool Config** | TypeScript in `.opencode/tools/` | Claude Skills + MCP tools |
+| **Agent Config** | Markdown files in `agents/` | Claude Skills + MCP |
+| **Tool Config** | TypeScript in `tools/` | Claude Skills + MCP tools |
 | **Model Selection** | `opencode.json` | Built-in (Claude models only) |
 | **MCP Support** | Yes | Yes (excellent) |
 
@@ -46,7 +46,7 @@ Create skills in `~/.claude/skills/`:
 mkdir -p ~/.claude/skills
 
 # Copy skills from this framework
-cp -r /path/to/agentic-framework/.opencode/skills/* ~/.claude/skills/
+cp -r /path/to/agentic-framework/skills/* ~/.claude/skills/
 ```
 
 ## Agent Implementation

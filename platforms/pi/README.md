@@ -36,7 +36,7 @@ npm install -g @mariozechner/pi-coding-agent
 mkdir -p ~/.pi/agent/skills
 
 # Copy universal skills
-cp -r .opencode/skills/* ~/.pi/agent/skills/
+cp -r skills/* ~/.pi/agent/skills/
 ```
 
 ## How Skills Work in Pi

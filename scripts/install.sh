@@ -55,15 +55,15 @@ install_opencode() {
     echo ""
 
     echo -e "${YELLOW}Step 2/3: Installing tools...${NC}"
-    if [ -d "$PROJECT_ROOT/.opencode/tools" ]; then
-        cp "$PROJECT_ROOT/.opencode/tools/"*.ts "$OPENCODE_DIR/tools/"
+    if [ -d "$PROJECT_ROOT/tools" ]; then
+        cp "$PROJECT_ROOT/tools/"*.ts "$OPENCODE_DIR/tools/"
         echo -e "${GREEN}✓${NC} Tools installed (gsr, figma-rest, figma-oauth)"
     fi
     echo ""
 
     echo -e "${YELLOW}Step 3/3: Installing skills...${NC}"
-    if [ -d "$PROJECT_ROOT/.opencode/skills" ]; then
-        cp -r "$PROJECT_ROOT/.opencode/skills/"* "$OPENCODE_DIR/skills/" 2>/dev/null || true
+    if [ -d "$PROJECT_ROOT/skills" ]; then
+        cp -r "$PROJECT_ROOT/skills/"* "$OPENCODE_DIR/skills/" 2>/dev/null || true
         echo -e "${GREEN}✓${NC} Skills installed"
     fi
     echo ""
@@ -88,8 +88,8 @@ install_claude_code() {
         cp "$PROJECT_ROOT/platforms/claude-code/"*.md "$CLAUDE_DIR/skills/" 2>/dev/null || true
     fi
     # Copy universal skills
-    if [ -d "$PROJECT_ROOT/.opencode/skills" ]; then
-        cp -r "$PROJECT_ROOT/.opencode/skills/"* "$CLAUDE_DIR/skills/" 2>/dev/null || true
+    if [ -d "$PROJECT_ROOT/skills" ]; then
+        cp -r "$PROJECT_ROOT/skills/"* "$CLAUDE_DIR/skills/" 2>/dev/null || true
     fi
     echo -e "${GREEN}✓${NC} Skills installed"
     echo ""
@@ -124,8 +124,8 @@ install_gemini() {
         cp "$PROJECT_ROOT/platforms/gemini/"*.md "$GEMINI_DIR/skills/" 2>/dev/null || true
     fi
     # Copy universal skills
-    if [ -d "$PROJECT_ROOT/.opencode/skills" ]; then
-        cp -r "$PROJECT_ROOT/.opencode/skills/"* "$GEMINI_DIR/skills/" 2>/dev/null || true
+    if [ -d "$PROJECT_ROOT/skills" ]; then
+        cp -r "$PROJECT_ROOT/skills/"* "$GEMINI_DIR/skills/" 2>/dev/null || true
     fi
     echo -e "${GREEN}✓${NC} Skills installed"
     echo ""
@@ -167,8 +167,8 @@ install_cursor() {
 
     echo -e "${YELLOW}Step 2/2: Installing skills...${NC}"
     # Copy universal skills
-    if [ -d "$PROJECT_ROOT/.opencode/skills" ]; then
-        cp -r "$PROJECT_ROOT/.opencode/skills/"* "$CURSOR_DIR/skills/" 2>/dev/null || true
+    if [ -d "$PROJECT_ROOT/skills" ]; then
+        cp -r "$PROJECT_ROOT/skills/"* "$CURSOR_DIR/skills/" 2>/dev/null || true
     fi
     echo -e "${GREEN}✓${NC} Skills installed"
     echo ""
@@ -197,8 +197,8 @@ install_pi() {
 
     echo -e "${YELLOW}Step 2/2: Installing skills...${NC}"
     # Copy universal skills as Pi skill packages
-    if [ -d "$PROJECT_ROOT/.opencode/skills" ]; then
-        cp -r "$PROJECT_ROOT/.opencode/skills/"* "$PI_DIR/skills/" 2>/dev/null || true
+    if [ -d "$PROJECT_ROOT/skills" ]; then
+        cp -r "$PROJECT_ROOT/skills/"* "$PI_DIR/skills/" 2>/dev/null || true
         # Remove README if it exists to avoid skill parser conflicts
         rm -f "$PI_DIR/skills/README.md"
     fi
